@@ -40,12 +40,17 @@
     "xss-clean": "^0.1.4",
     "hpp": "^0.2.3",
     "apicache": "^1.6.3",
-    "cookie-parser": "^1.4.6"
+    "cookie-parser": "^1.4.6",
+    "express-mongo-sanitize": "^2.2.0",
+    "redis": "^4.6.10",
+    "node-cache": "^5.1.2",
+    "csurf": "^1.11.0"
   },
   "devDependencies": {
     "jest": "^29.7.0",
     "supertest": "^6.3.3",
     "eslint": "^8.56.0",
-    "prettier": "^3.2.4"
+    "prettier": "^3.2.4",
+    "cypress": "^13.6.1"
   }
 }

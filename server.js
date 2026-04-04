@@ -19,6 +19,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const apicache = require('apicache');
 const cookieParser = require('cookie-parser');
+const mongoSanitize = require('express-mongo-sanitize');
 const cache = apicache.middleware;
 
 // Google Cloud Services
@@ -93,6 +94,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // SECURITY: Prevent Cross-Site Scripting (XSS)
 app.use(xss());
+
+// SECURITY: Prevent NoSQL Injection
+app.use(mongoSanitize());
 
 // SECURITY: Prevent HTTP Parameter Pollution
 app.use(hpp());
