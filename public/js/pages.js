@@ -3,11 +3,10 @@
    ============================================ */
 
 const Pages = {
-
-    // ========== HOME PAGE ==========
-    home() {
-        const stats = Store.getStats();
-        return `
+  // ========== HOME PAGE ==========
+  home() {
+    const stats = Store.getStats();
+    return `
             <!-- Hero Section -->
             <section class="hero">
                 <div class="hero-bg-pattern">
@@ -200,8 +199,11 @@ const Pages = {
                     <p class="section-subtitle">Find quality healthcare providers in your city.</p>
                 </div>
                 <div class="locations-grid stagger">
-                    ${CITIES.slice(0, 8).map(city => {
-                        const count = Store.state.doctors.filter(d => d.city === city.name).length;
+                    ${CITIES.slice(0, 8)
+                      .map((city) => {
+                        const count = Store.state.doctors.filter(
+                          (d) => d.city === city.name,
+                        ).length;
                         return `
                             <div class="location-card fade-in" onclick="App.navigateTo('doctors', null, '${city.name}')" id="location-${city.name.toLowerCase()}">
                                 <div class="location-icon">${city.icon}</div>
@@ -209,7 +211,8 @@ const Pages = {
                                 <p class="location-count">${count} Doctor${count !== 1 ? 's' : ''} Available</p>
                             </div>
                         `;
-                    }).join('')}
+                      })
+                      .join('')}
                 </div>
             </section>
 
@@ -227,26 +230,40 @@ const Pages = {
                 </div>
             </section>
         `;
-    },
+  },
 
-    // ========== FIND DOCTORS PAGE ==========
-    doctors(filters = {}) {
-        const doctors = Store.getDoctors(filters);
-        const specialtyChips = ['All', ...SPECIALTIES].map(s => `
+  // ========== FIND DOCTORS PAGE ==========
+  doctors(filters = {}) {
+    const doctors = Store.getDoctors(filters);
+    const specialtyChips = ['All', ...SPECIALTIES]
+      .map(
+        (s) => `
             <button class="filter-chip ${(filters.specialty || 'All') === s ? 'active' : ''}"
                     onclick="App.filterDoctors('specialty', '${s}')"
                     id="filter-${s.replace(/\s/g, '-').toLowerCase()}">${s}</button>
-        `).join('');
+        `,
+      )
+      .join('');
 
-        const cityOptions = ['All', ...CITIES.map(c => c.name)].map(c =>
-            `<option value="${c}" ${(filters.city || 'All') === c ? 'selected' : ''}>${c === 'All' ? 'All Cities' : c}</option>`
-        ).join('');
+    const cityOptions = ['All', ...CITIES.map((c) => c.name)]
+      .map(
+        (c) =>
+          `<option value="${c}" ${(filters.city || 'All') === c ? 'selected' : ''}>${c === 'All' ? 'All Cities' : c}</option>`,
+      )
+      .join('');
 
-        const doctorCards = doctors.length > 0
-            ? doctors.map(d => Components.renderDoctorCard(d)).join('')
-            : Components.renderEmptyState('search_off', 'No Doctors Found', 'Try adjusting your filters or search query.', 'Clear Filters', 'doctors');
+    const doctorCards =
+      doctors.length > 0
+        ? doctors.map((d) => Components.renderDoctorCard(d)).join('')
+        : Components.renderEmptyState(
+            'search_off',
+            'No Doctors Found',
+            'Try adjusting your filters or search query.',
+            'Clear Filters',
+            'doctors',
+          );
 
-        return `
+    return `
             <div class="page-header">
                 <div class="page-header-content">
                     <h1 class="page-title">Find a Doctor</h1>
@@ -276,15 +293,15 @@ const Pages = {
                 </div>
             </div>
         `;
-    },
+  },
 
-    // ========== APPOINTMENTS PAGE ==========
-    appointments() {
-        const appointments = Store.getAppointments();
-        const upcoming = appointments.filter(a => a.status === 'confirmed' || a.status === 'pending');
-        const past = appointments.filter(a => a.status === 'completed' || a.status === 'cancelled');
+  // ========== APPOINTMENTS PAGE ==========
+  appointments() {
+    const appointments = Store.getAppointments();
+    const upcoming = appointments.filter((a) => a.status === 'confirmed' || a.status === 'pending');
+    const past = appointments.filter((a) => a.status === 'completed' || a.status === 'cancelled');
 
-        return `
+    return `
             <div class="page-header">
                 <div class="page-header-content">
                     <h1 class="page-title">My Appointments</h1>
@@ -308,38 +325,56 @@ const Pages = {
                 </div>
 
                 <div id="appointments-upcoming" class="appointments-list">
-                    ${upcoming.length > 0
-                        ? upcoming.map(a => Components.renderAppointmentCard(a)).join('')
-                        : Components.renderEmptyState('calendar_today', 'No Upcoming Appointments', 'Book an appointment with a doctor to get started.', 'Find a Doctor', 'doctors')
+                    ${
+                      upcoming.length > 0
+                        ? upcoming.map((a) => Components.renderAppointmentCard(a)).join('')
+                        : Components.renderEmptyState(
+                            'calendar_today',
+                            'No Upcoming Appointments',
+                            'Book an appointment with a doctor to get started.',
+                            'Find a Doctor',
+                            'doctors',
+                          )
                     }
                 </div>
 
                 <div id="appointments-past" class="appointments-list hidden">
-                    ${past.length > 0
-                        ? past.map(a => Components.renderAppointmentCard(a)).join('')
-                        : Components.renderEmptyState('history', 'No Past Appointments', 'Your completed appointments will appear here.')
+                    ${
+                      past.length > 0
+                        ? past.map((a) => Components.renderAppointmentCard(a)).join('')
+                        : Components.renderEmptyState(
+                            'history',
+                            'No Past Appointments',
+                            'Your completed appointments will appear here.',
+                          )
                     }
                 </div>
             </div>
         `;
-    },
+  },
 
-    // ========== BOOK APPOINTMENT PAGE ==========
-    bookAppointment(doctorId) {
-        const doctor = Store.getDoctorById(doctorId);
-        if (!doctor) {
-            return Components.renderEmptyState('error', 'Doctor Not Found', 'The requested doctor profile could not be found.', 'Browse Doctors', 'doctors');
-        }
+  // ========== BOOK APPOINTMENT PAGE ==========
+  bookAppointment(doctorId) {
+    const doctor = Store.getDoctorById(doctorId);
+    if (!doctor) {
+      return Components.renderEmptyState(
+        'error',
+        'Doctor Not Found',
+        'The requested doctor profile could not be found.',
+        'Browse Doctors',
+        'doctors',
+      );
+    }
 
-        const dateInputMin = new Date().toISOString().split('T')[0];
-        const slotsHTML = TIME_SLOTS.map((slot, i) => {
-            const unavailable = Math.random() < 0.2 ? 'unavailable' : '';
-            return `<button class="time-slot ${unavailable}" ${unavailable ? 'disabled' : ''}
+    const dateInputMin = new Date().toISOString().split('T')[0];
+    const slotsHTML = TIME_SLOTS.map((slot, i) => {
+      const unavailable = Math.random() < 0.2 ? 'unavailable' : '';
+      return `<button class="time-slot ${unavailable}" ${unavailable ? 'disabled' : ''}
                            onclick="App.selectTimeSlot(this, '${slot}')"
                            id="slot-${i}">${slot}</button>`;
-        }).join('');
+    }).join('');
 
-        return `
+    return `
             <div class="page-header">
                 <div class="page-header-content">
                     <h1 class="page-title">Book Appointment</h1>
@@ -479,20 +514,27 @@ const Pages = {
                 </div>
             </div>
         `;
-    },
+  },
 
-    // ========== RECORDS PAGE ==========
-    records() {
-        const records = Store.getRecords();
-        const user = Store.state.currentUser;
-        const userName = user ? user.name : 'Rahul Verma';
-        const userEmail = user ? user.email : 'rahul.verma@email.com';
+  // ========== RECORDS PAGE ==========
+  records() {
+    const records = Store.getRecords();
+    const user = Store.state.currentUser;
+    const userName = user ? user.name : 'Rahul Verma';
+    const userEmail = user ? user.email : 'rahul.verma@email.com';
 
-        const recordCards = records.length > 0
-            ? records.map(r => Components.renderRecordCard(r)).join('')
-            : Components.renderEmptyState('folder_open', 'No Medical Records', 'Your medical records will appear here after your visits.', 'Book Appointment', 'doctors');
+    const recordCards =
+      records.length > 0
+        ? records.map((r) => Components.renderRecordCard(r)).join('')
+        : Components.renderEmptyState(
+            'folder_open',
+            'No Medical Records',
+            'Your medical records will appear here after your visits.',
+            'Book Appointment',
+            'doctors',
+          );
 
-        return `
+    return `
             <div class="page-header">
                 <div class="page-header-content">
                     <h1 class="page-title">Medical Records</h1>
@@ -559,31 +601,36 @@ const Pages = {
                 </div>
             </div>
         `;
-    },
+  },
 
-    // ========== DASHBOARD PAGE ==========
-    dashboard() {
-        const user = Store.state.currentUser;
-        if (!user) return Pages.login();
+  // ========== DASHBOARD PAGE ==========
+  dashboard() {
+    const user = Store.state.currentUser;
+    if (!user) return Pages.login();
 
-        const role = user.role || 'patient';
-        if (role === 'admin') return this._adminDashboard(user);
-        if (role === 'doctor') return this._doctorDashboard(user);
-        return this._patientDashboard(user);
-    },
+    const role = user.role || 'patient';
+    if (role === 'admin') return this._adminDashboard(user);
+    if (role === 'doctor') return this._doctorDashboard(user);
+    return this._patientDashboard(user);
+  },
 
-    // ---------- PATIENT DASHBOARD ----------
-    _patientDashboard(user) {
-        const stats = Store.getStats();
-        const appointments = Store.getAppointments();
-        const recent = appointments.slice(0, 4);
-        const greeting = new Date().getHours() < 12 ? 'Good Morning' : new Date().getHours() < 17 ? 'Good Afternoon' : 'Good Evening';
+  // ---------- PATIENT DASHBOARD ----------
+  _patientDashboard(user) {
+    const stats = Store.getStats();
+    const appointments = Store.getAppointments();
+    const recent = appointments.slice(0, 4);
+    const greeting =
+      new Date().getHours() < 12
+        ? 'Good Morning'
+        : new Date().getHours() < 17
+          ? 'Good Afternoon'
+          : 'Good Evening';
 
-        const verifiedBadge = user.verified
-            ? '<span class="badge badge-success" style="margin-left:8px;"><span class="material-icons-round" style="font-size:14px;">verified</span> Verified</span>'
-            : '<span class="badge badge-warning" style="margin-left:8px;cursor:pointer;" onclick="App.verifyAccount()"><span class="material-icons-round" style="font-size:14px;">pending</span> Verify Now</span>';
+    const verifiedBadge = user.verified
+      ? '<span class="badge badge-success" style="margin-left:8px;"><span class="material-icons-round" style="font-size:14px;">verified</span> Verified</span>'
+      : '<span class="badge badge-warning" style="margin-left:8px;cursor:pointer;" onclick="App.verifyAccount()"><span class="material-icons-round" style="font-size:14px;">pending</span> Verify Now</span>';
 
-        return `
+    return `
             <div class="page-header">
                 <div class="page-header-content">
                     <h1 class="page-title">${greeting}, ${user.name}! 👋 ${verifiedBadge}</h1>
@@ -652,9 +699,14 @@ const Pages = {
                             </button>
                         </div>
                         <div class="appointments-list">
-                            ${recent.length > 0
-                                ? recent.map(a => Components.renderAppointmentCard(a)).join('')
-                                : Components.renderEmptyState('calendar_today', 'No Appointments', 'Start by booking your first appointment.')
+                            ${
+                              recent.length > 0
+                                ? recent.map((a) => Components.renderAppointmentCard(a)).join('')
+                                : Components.renderEmptyState(
+                                    'calendar_today',
+                                    'No Appointments',
+                                    'Start by booking your first appointment.',
+                                  )
                             }
                         </div>
                     </div>
@@ -673,42 +725,53 @@ const Pages = {
                                     <div class="activity-time">Today</div>
                                 </div>
                             </div>
-                            ${user.verified ? `<div class="activity-item">
+                            ${
+                              user.verified
+                                ? `<div class="activity-item">
                                 <div class="activity-dot green"><span class="material-icons-round">verified</span></div>
                                 <div>
                                     <div class="activity-text"><strong>Account verified</strong> — Full access enabled</div>
                                     <div class="activity-time">Today</div>
                                 </div>
-                            </div>` : `<div class="activity-item">
+                            </div>`
+                                : `<div class="activity-item">
                                 <div class="activity-dot orange"><span class="material-icons-round">pending</span></div>
                                 <div>
                                     <div class="activity-text"><strong>Verification pending</strong> — Click to verify your account</div>
                                     <div class="activity-time"><a href="#" onclick="App.verifyAccount()" style="color:var(--primary-500);font-weight:600;">Verify Now →</a></div>
                                 </div>
-                            </div>`}
+                            </div>`
+                            }
                         </div>
                     </div>
                 </div>
             </div>
         `;
-    },
+  },
 
-    // ---------- DOCTOR DASHBOARD ----------
-    _doctorDashboard(user) {
-        const appointments = Store.getAppointments();
-        const upcoming = appointments.filter(a => a.status === 'confirmed');
-        const completed = appointments.filter(a => a.status === 'completed');
-        const greeting = new Date().getHours() < 12 ? 'Good Morning' : new Date().getHours() < 17 ? 'Good Afternoon' : 'Good Evening';
+  // ---------- DOCTOR DASHBOARD ----------
+  _doctorDashboard(user) {
+    const appointments = Store.getAppointments();
+    const upcoming = appointments.filter((a) => a.status === 'confirmed');
+    const completed = appointments.filter((a) => a.status === 'completed');
+    const greeting =
+      new Date().getHours() < 12
+        ? 'Good Morning'
+        : new Date().getHours() < 17
+          ? 'Good Afternoon'
+          : 'Good Evening';
 
-        const verifiedBadge = user.verified
-            ? '<span class="badge badge-success" style="margin-left:8px;"><span class="material-icons-round" style="font-size:14px;">verified</span> Verified Doctor</span>'
-            : '<span class="badge badge-warning" style="margin-left:8px;cursor:pointer;" onclick="App.verifyAccount()"><span class="material-icons-round" style="font-size:14px;">pending</span> Pending Verification</span>';
+    const verifiedBadge = user.verified
+      ? '<span class="badge badge-success" style="margin-left:8px;"><span class="material-icons-round" style="font-size:14px;">verified</span> Verified Doctor</span>'
+      : '<span class="badge badge-warning" style="margin-left:8px;cursor:pointer;" onclick="App.verifyAccount()"><span class="material-icons-round" style="font-size:14px;">pending</span> Pending Verification</span>';
 
-        const appointmentRows = upcoming.slice(0, 5).map(a => {
-            const doctor = Store.getDoctorById(a.doctorId);
-            return `<tr>
+    const appointmentRows = upcoming
+      .slice(0, 5)
+      .map((a) => {
+        const doctor = Store.getDoctorById(a.doctorId);
+        return `<tr>
                 <td style="font-weight:600;">${a.patientName || 'Patient'}</td>
-                <td>${new Date(a.date).toLocaleDateString('en-IN', {day:'numeric',month:'short'})}</td>
+                <td>${new Date(a.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</td>
                 <td>${a.time}</td>
                 <td>${a.type}</td>
                 <td><span class="badge badge-success">Confirmed</span></td>
@@ -718,9 +781,10 @@ const Pages = {
                     </button>
                 </td>
             </tr>`;
-        }).join('');
+      })
+      .join('');
 
-        return `
+    return `
             <div class="page-header">
                 <div class="page-header-content">
                     <h1 class="page-title">${greeting}, ${user.name}! 🩺 ${verifiedBadge}</h1>
@@ -732,7 +796,7 @@ const Pages = {
             </div>
             <div class="dashboard-layout">
                 <div class="dashboard-stats stagger">
-                    ${Components.renderStatCard('people', 'Today\'s Patients', upcoming.length, 'teal')}
+                    ${Components.renderStatCard('people', "Today's Patients", upcoming.length, 'teal')}
                     ${Components.renderStatCard('calendar_today', 'Upcoming', upcoming.length, 'blue')}
                     ${Components.renderStatCard('task_alt', 'Completed', completed.length, 'green')}
                     ${Components.renderStatCard('description', 'Records Created', Store.getRecords().length, 'orange')}
@@ -775,7 +839,9 @@ const Pages = {
                             Upcoming Appointments
                         </h3>
                     </div>
-                    ${upcoming.length > 0 ? `
+                    ${
+                      upcoming.length > 0
+                        ? `
                     <div style="overflow-x:auto;">
                         <table class="data-table" style="width:100%;border-collapse:separate;border-spacing:0;">
                             <thead>
@@ -790,42 +856,60 @@ const Pages = {
                             </thead>
                             <tbody>${appointmentRows}</tbody>
                         </table>
-                    </div>` : Components.renderEmptyState('calendar_today', 'No Appointments Yet', 'Patients will appear here when they book with you.')}
+                    </div>`
+                        : Components.renderEmptyState(
+                            'calendar_today',
+                            'No Appointments Yet',
+                            'Patients will appear here when they book with you.',
+                          )
+                    }
                 </div>
             </div>
         `;
-    },
+  },
 
-    // ---------- ADMIN DASHBOARD ----------
-    _adminDashboard(user) {
-        const greeting = new Date().getHours() < 12 ? 'Good Morning' : new Date().getHours() < 17 ? 'Good Afternoon' : 'Good Evening';
-        const allUsers = Store.state.adminUsers || [];
-        const patients = allUsers.filter(u => u.role === 'patient');
-        const doctors = allUsers.filter(u => u.role === 'doctor');
-        const unverified = allUsers.filter(u => !u.verified);
-        const appointments = Store.getAppointments();
+  // ---------- ADMIN DASHBOARD ----------
+  _adminDashboard(user) {
+    const greeting =
+      new Date().getHours() < 12
+        ? 'Good Morning'
+        : new Date().getHours() < 17
+          ? 'Good Afternoon'
+          : 'Good Evening';
+    const allUsers = Store.state.adminUsers || [];
+    const patients = allUsers.filter((u) => u.role === 'patient');
+    const doctors = allUsers.filter((u) => u.role === 'doctor');
+    const unverified = allUsers.filter((u) => !u.verified);
+    const appointments = Store.getAppointments();
 
-        const userRows = allUsers.filter(u => u.role !== 'admin').map(u => {
-            const verifyBadge = u.verified
-                ? '<span class="badge badge-success" style="font-size:0.7rem;"><span class="material-icons-round" style="font-size:12px;">verified</span> Verified</span>'
-                : '<span class="badge badge-warning" style="font-size:0.7rem;">Unverified</span>';
-            const statusBadge = u.active
-                ? '<span class="badge badge-success" style="font-size:0.7rem;">Active</span>'
-                : '<span class="badge badge-error" style="font-size:0.7rem;">Inactive</span>';
-            const roleBadge = u.role === 'doctor'
-                ? '<span class="badge" style="background:rgba(14,161,122,0.15);color:var(--primary-600);font-size:0.7rem;">Doctor</span>'
-                : '<span class="badge badge-info" style="font-size:0.7rem;">Patient</span>';
+    const userRows = allUsers
+      .filter((u) => u.role !== 'admin')
+      .map((u) => {
+        const verifyBadge = u.verified
+          ? '<span class="badge badge-success" style="font-size:0.7rem;"><span class="material-icons-round" style="font-size:12px;">verified</span> Verified</span>'
+          : '<span class="badge badge-warning" style="font-size:0.7rem;">Unverified</span>';
+        const statusBadge = u.active
+          ? '<span class="badge badge-success" style="font-size:0.7rem;">Active</span>'
+          : '<span class="badge badge-error" style="font-size:0.7rem;">Inactive</span>';
+        const roleBadge =
+          u.role === 'doctor'
+            ? '<span class="badge" style="background:rgba(14,161,122,0.15);color:var(--primary-600);font-size:0.7rem;">Doctor</span>'
+            : '<span class="badge badge-info" style="font-size:0.7rem;">Patient</span>';
 
-            return `<tr>
+        return `<tr>
                 <td style="font-weight:600;">${u.name}</td>
                 <td style="font-size:0.85rem;">${u.email}</td>
                 <td>${roleBadge}</td>
                 <td>${verifyBadge}</td>
                 <td>${statusBadge}</td>
                 <td style="display:flex;gap:4px;">
-                    ${!u.verified ? `<button class="btn btn-ghost btn-sm" onclick="App.adminVerifyUser('${u.id}')" title="Verify">
+                    ${
+                      !u.verified
+                        ? `<button class="btn btn-ghost btn-sm" onclick="App.adminVerifyUser('${u.id}')" title="Verify">
                         <span class="material-icons-round" style="color:var(--success);font-size:18px;">verified</span>
-                    </button>` : ''}
+                    </button>`
+                        : ''
+                    }
                     <button class="btn btn-ghost btn-sm" onclick="App.adminToggleUser('${u.id}')" title="${u.active ? 'Deactivate' : 'Activate'}">
                         <span class="material-icons-round" style="color:${u.active ? 'var(--error)' : 'var(--success)'};font-size:18px;">${u.active ? 'block' : 'check_circle'}</span>
                     </button>
@@ -834,9 +918,10 @@ const Pages = {
                     </button>
                 </td>
             </tr>`;
-        }).join('');
+      })
+      .join('');
 
-        return `
+    return `
             <div class="page-header">
                 <div class="page-header-content">
                     <h1 class="page-title">${greeting}, Admin! 🛡️</h1>
@@ -857,7 +942,7 @@ const Pages = {
                 <div class="dashboard-stats stagger" style="margin-top:var(--space-4);">
                     ${Components.renderStatCard('calendar_today', 'Total Appointments', appointments.length, 'teal')}
                     ${Components.renderStatCard('local_hospital', 'Registered Doctors', Store.state.doctors.length, 'green')}
-                    ${Components.renderStatCard('location_city', 'Cities Served', [...new Set(Store.state.doctors.map(d => d.city))].length, 'blue')}
+                    ${Components.renderStatCard('location_city', 'Cities Served', [...new Set(Store.state.doctors.map((d) => d.city))].length, 'blue')}
                     ${Components.renderStatCard('description', 'Medical Records', Store.getRecords().length, 'orange')}
                 </div>
 
@@ -901,7 +986,9 @@ const Pages = {
                             <span class="material-icons-round" style="font-size:16px;">refresh</span> Refresh
                         </button>
                     </div>
-                    ${allUsers.filter(u => u.role !== 'admin').length > 0 ? `
+                    ${
+                      allUsers.filter((u) => u.role !== 'admin').length > 0
+                        ? `
                     <div style="overflow-x:auto;">
                         <table class="data-table" style="width:100%;border-collapse:separate;border-spacing:0;">
                             <thead>
@@ -916,17 +1003,21 @@ const Pages = {
                             </thead>
                             <tbody>${userRows}</tbody>
                         </table>
-                    </div>` : Components.renderEmptyState('people', 'No Users Yet', 'Users will appear here when they register.')}
+                    </div>`
+                        : Components.renderEmptyState(
+                            'people',
+                            'No Users Yet',
+                            'Users will appear here when they register.',
+                          )
+                    }
                 </div>
             </div>
         `;
-    },
+  },
 
-
-
-    // ========== LOGIN PAGE ==========
-    login() {
-        return `
+  // ========== LOGIN PAGE ==========
+  login() {
+    return `
             <div class="auth-layout">
                 <div class="auth-card scale-in">
                     <div class="auth-header">
@@ -964,11 +1055,11 @@ const Pages = {
                 </div>
             </div>
         `;
-    },
+  },
 
-    // ========== REGISTER PAGE ==========
-    register() {
-        return `
+  // ========== REGISTER PAGE ==========
+  register() {
+    return `
             <div class="auth-layout">
                 <div class="auth-card scale-in" style="max-width:520px;">
                     <div class="auth-header">
@@ -1019,7 +1110,7 @@ const Pages = {
                                 <label class="form-label">City *</label>
                                 <select class="form-select" id="register-city" required>
                                     <option value="">Select City</option>
-                                    ${CITIES.map(c => `<option value="${c.name}">${c.name}</option>`).join('')}
+                                    ${CITIES.map((c) => `<option value="${c.name}">${c.name}</option>`).join('')}
                                 </select>
                             </div>
                             <div class="form-group">
@@ -1045,13 +1136,18 @@ const Pages = {
                 </div>
             </div>
         `;
-    },
+  },
 
-    // ========== PROFILE PAGE ==========
-    profile() {
-        const user = Store.state.currentUser || { name: 'Guest User', email: 'guest@medicap.com', role: 'patient', city: 'Ahmedabad' };
+  // ========== PROFILE PAGE ==========
+  profile() {
+    const user = Store.state.currentUser || {
+      name: 'Guest User',
+      email: 'guest@medicap.com',
+      role: 'patient',
+      city: 'Ahmedabad',
+    };
 
-        return `
+    return `
             <div class="page-header">
                 <div class="page-header-content">
                     <h1 class="page-title">My Profile</h1>
@@ -1099,7 +1195,7 @@ const Pages = {
                             <div class="form-group">
                                 <label class="form-label">City</label>
                                 <select class="form-select" id="profile-city">
-                                    ${CITIES.map(c => `<option value="${c.name}" ${c.name === user.city ? 'selected' : ''}>${c.name}</option>`).join('')}
+                                    ${CITIES.map((c) => `<option value="${c.name}" ${c.name === user.city ? 'selected' : ''}>${c.name}</option>`).join('')}
                                 </select>
                             </div>
                             <div class="form-group">
@@ -1156,5 +1252,5 @@ const Pages = {
                 </div>
             </div>
         `;
-    }
+  },
 };
