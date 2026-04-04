@@ -1,6 +1,6 @@
 # ============================================
 # MediCap — Dockerfile for Google Cloud Run
-# v3.0 — With SQLite support
+# v3.1 — SQLite + Google Cloud Services
 # ============================================
 
 FROM node:20-alpine AS production
@@ -19,6 +19,8 @@ RUN npm install --omit=dev && npm cache clean --force
 # Copy application source
 COPY server.js ./
 COPY public/ ./public/
+COPY services/ ./services/
+COPY tests/ ./tests/
 
 # Create data directory for SQLite
 RUN mkdir -p /app/data
@@ -26,6 +28,7 @@ RUN mkdir -p /app/data
 # Set environment
 ENV NODE_ENV=production
 ENV PORT=8080
+ENV GOOGLE_CLOUD_PROJECT=medicap-cloud
 
 EXPOSE 8080
 

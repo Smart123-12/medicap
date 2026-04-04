@@ -1,15 +1,20 @@
 {
   "name": "medicap",
-  "version": "3.0.0",
-  "description": "MediCap - Doctor & Patient Management System for Gujarat and India",
+  "version": "3.1.0",
+  "description": "MediCap - Doctor & Patient Management System for Gujarat and India with Google Cloud integration",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "node tests/api.test.js",
+    "test:health": "node -e \"fetch('http://localhost:8080/api/health').then(r=>r.json()).then(console.log)\""
   },
-  "keywords": ["healthcare", "doctor", "patient", "appointments", "medical-records", "gujarat", "india"],
+  "keywords": ["healthcare", "doctor", "patient", "appointments", "medical-records", "gujarat", "india", "google-cloud", "cloud-run"],
   "author": "MediCap Team",
   "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "express": "^4.21.0",
     "better-sqlite3": "^11.0.0",
@@ -19,6 +24,8 @@
     "cors": "^2.8.5",
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "@google-cloud/logging": "^11.0.0",
+    "@google-cloud/error-reporting": "^3.0.0"
   }
 }

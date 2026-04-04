@@ -14,6 +14,10 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const fs = require('fs');
 
+// Google Cloud Services
+let gcloud = null;
+try { gcloud = require('./services/google-cloud'); } catch(e) {}
+
 // ==================== DATABASE SETUP ====================
 let Database;
 let db;
@@ -55,6 +59,9 @@ app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Google Cloud request logging
+if (gcloud && gcloud.requestLogger) app.use(gcloud.requestLogger);
 
 // ==================== DATABASE LAYER ====================
 // Abstraction layer that works with SQLite or in-memory fallback
@@ -730,21 +737,38 @@ app.get('/api/stats', authenticateToken, (req, res) => {
 });
 
 // ==================== HEALTH CHECK ====================
-app.get('/api/health', (req, res) => {
+app.get('/api/health', async (req, res) => {
+    const cloudMeta = gcloud ? await gcloud.getCloudMetadata() : { project: 'local' };
     res.json({
-        status: 'healthy', service: 'medicap-api', version: '3.0.0',
+        status: 'healthy', service: 'medicap-api', version: '3.1.0',
         database: db ? 'sqlite' : 'memory',
-        uptime: process.uptime(), timestamp: new Date().toISOString()
+        uptime: process.uptime(), timestamp: new Date().toISOString(),
+        cloud: cloudMeta,
+        environment: process.env.NODE_ENV || 'development',
+        googleCloud: {
+            project: process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT || null,
+            region: process.env.CLOUD_RUN_REGION || null,
+            service: process.env.K_SERVICE || null,
+            revision: process.env.K_REVISION || null
+        }
     });
 });
 
 // ==================== SPA CATCH-ALL ====================
 app.get('*', (req, res) => { res.sendFile(path.join(__dirname, 'public', 'index.html')); });
 
+// ==================== ERROR HANDLER ====================
+app.use((err, req, res, next) => {
+    if (gcloud) gcloud.reportError(err, { path: req.path, method: req.method });
+    console.error('Unhandled error:', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+});
+
 // ==================== START ====================
 async function start() {
     initDatabase();
     await seedData();
+    if (gcloud && gcloud.initGoogleCloud) gcloud.initGoogleCloud();
     app.listen(PORT, '0.0.0.0', () => {
         console.log(`
 ╔═══════════════════════════════════════════════╗
