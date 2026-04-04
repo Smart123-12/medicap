@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MediCap - A modern Doctor & Patient Management System for Gujarat and India. Book appointments, track records, and connect with healthcare providers easily.">
+    <meta name="keywords" content="healthcare, doctor, patient, appointment, medical records, Gujarat, India, hospital management">
+    <meta name="author" content="MediCap">
+    <title>MediCap — Doctor & Patient Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-inner">
+            <div class="pulse-ring"></div>
+            <span class="material-icons-round preloader-icon">local_hospital</span>
+            <p class="preloader-text">MediCap</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="main-nav" class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" id="nav-logo">
+                <span class="material-icons-round logo-icon">favorite</span>
+                <span class="logo-text">Medi<span class="logo-accent">Cap</span></span>
+            </a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+                <li><a href="#" class="nav-link" data-page="doctors">Find Doctors</a></li>
+                <li><a href="#" class="nav-link" data-page="appointments">Appointments</a></li>
+                <li><a href="#" class="nav-link" data-page="records">Records</a></li>
+                <li><a href="#" class="nav-link" data-page="dashboard">Dashboard</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-icon theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <span class="material-icons-round">dark_mode</span>
+                </button>
+                <button class="btn btn-primary nav-cta" id="nav-login-btn" data-page="login">
+                    <span class="material-icons-round">login</span>
+                    Login
+                </button>
+                <div class="user-menu hidden" id="user-menu">
+                    <button class="user-avatar-btn" id="user-avatar-btn">
+                        <div class="avatar-circle">
+                            <span class="material-icons-round">person</span>
+                        </div>
+                        <span class="user-name" id="user-display-name">User</span>
+                        <span class="material-icons-round chevron">expand_more</span>
+                    </button>
+                    <div class="user-dropdown hidden" id="user-dropdown">
+                        <a href="#" class="dropdown-item" data-page="dashboard">
+                            <span class="material-icons-round">dashboard</span> Dashboard
+                        </a>
+                        <a href="#" class="dropdown-item" data-page="profile">
+                            <span class="material-icons-round">person</span> Profile
+                        </a>
+                        <hr class="dropdown-divider">
+                        <a href="#" class="dropdown-item logout-btn" id="logout-btn">
+                            <span class="material-icons-round">logout</span> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Nav Overlay -->
+    <div class="mobile-overlay hidden" id="mobile-overlay"></div>
+    <div class="mobile-nav hidden" id="mobile-nav">
+        <div class="mobile-nav-header">
+            <span class="logo-text">Medi<span class="logo-accent">Cap</span></span>
+            <button class="btn-icon" id="mobile-close">
+                <span class="material-icons-round">close</span>
+            </button>
+        </div>
+        <ul class="mobile-nav-links">
+            <li><a href="#" class="mobile-link active" data-page="home"><span class="material-icons-round">home</span> Home</a></li>
+            <li><a href="#" class="mobile-link" data-page="doctors"><span class="material-icons-round">medical_services</span> Find Doctors</a></li>
+            <li><a href="#" class="mobile-link" data-page="appointments"><span class="material-icons-round">calendar_today</span> Appointments</a></li>
+            <li><a href="#" class="mobile-link" data-page="records"><span class="material-icons-round">description</span> Records</a></li>
+            <li><a href="#" class="mobile-link" data-page="dashboard"><span class="material-icons-round">dashboard</span> Dashboard</a></li>
+        </ul>
+        <div class="mobile-nav-footer">
+            <button class="btn btn-primary btn-full" id="mobile-login-btn" data-page="login">Login / Register</button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main id="app-content">
+        <!-- Pages will be dynamically rendered here -->
+    </main>
+
+    <!-- Footer -->
+    <footer id="main-footer" class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="material-icons-round">favorite</span>
+                        <span class="logo-text">Medi<span class="logo-accent">Cap</span></span>
+                    </div>
+                    <p class="footer-desc">A modern healthcare management platform connecting doctors and patients across Gujarat and India. Simplifying healthcare, one appointment at a time.</p>
+                    <div class="footer-socials">
+                        <a href="#" class="social-link" aria-label="Twitter"><span class="material-icons-round">public</span></a>
+                        <a href="#" class="social-link" aria-label="Email"><span class="material-icons-round">email</span></a>
+                        <a href="#" class="social-link" aria-label="Phone"><span class="material-icons-round">phone</span></a>
+                    </div>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="doctors">Find a Doctor</a></li>
+                        <li><a href="#" data-page="appointments">Book Appointment</a></li>
+                        <li><a href="#" data-page="records">Medical Records</a></li>
+                        <li><a href="#" data-page="dashboard">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">General Medicine</a></li>
+                        <li><a href="#">Cardiology</a></li>
+                        <li><a href="#">Dermatology</a></li>
+                        <li><a href="#">Pediatrics</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Locations</h4>
+                    <ul>
+                        <li><a href="#">Ahmedabad</a></li>
+                        <li><a href="#">Surat</a></li>
+                        <li><a href="#">Vadodara</a></li>
+                        <li><a href="#">Rajkot</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 MediCap. All rights reserved. Made with <span class="material-icons-round heart-icon">favorite</span> in Gujarat, India</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/pages.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
