@@ -13,6 +13,8 @@ const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const fs = require('fs');
+const rateLimit = require('express-rate-limit');
+const compression = require('compression');
 
 // Google Cloud Services
 let gcloud = null;
@@ -42,11 +44,13 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 // ==================== MIDDLEWARE ====================
 app.use(cors());
+app.use(compression()); // EFFICIENCY: Gzip compression to improve performance
+
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://accounts.google.com", "https://www.googletagmanager.com", "https://www.google.com", "https://maps.googleapis.com"],
             scriptSrcAttr: ["'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com", "https://fonts.googleapis.com"],
@@ -55,6 +59,17 @@ app.use(helmet({
         }
     }
 }));
+
+// SECURITY: Rate Limiting to prevent brute-force and DDoS
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 1000, 
+    standardHeaders: true, 
+    legacyHeaders: false, 
+    message: 'Too many requests from this IP, please try again later.'
+});
+app.use(limiter);
+
 app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

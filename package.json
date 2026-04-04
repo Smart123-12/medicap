@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "node tests/api.test.js",
+    "test": "node tests/api.test.js && jest tests/server.test.js",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.+(js|json|html|css)\"",
     "test:health": "node -e \"fetch('http://localhost:8080/api/health').then(r=>r.json()).then(console.log)\""
   },
   "keywords": ["healthcare", "doctor", "patient", "appointments", "medical-records", "gujarat", "india", "google-cloud", "cloud-run"],
@@ -31,6 +34,14 @@
     "@google-cloud/pubsub": "^4.3.3",
     "firebase-admin": "^12.0.0",
     "@google/generative-ai": "^0.2.1",
-    "googleapis": "^133.0.0"
+    "googleapis": "^133.0.0",
+    "express-rate-limit": "^7.1.5",
+    "compression": "^1.7.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.4"
   }
 }
