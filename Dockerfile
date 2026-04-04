@@ -1,38 +1,42 @@
 # ============================================
 # MediCap — Dockerfile for Google Cloud Run
+# v3.0 — With SQLite support
 # ============================================
 
-# Use official Node.js LTS image
 FROM node:20-alpine AS production
 
-# Set working directory
+# Install build tools for native modules (better-sqlite3)
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /app
 
-# Copy package files first for better caching
-COPY package.json ./
+# Copy package files
+COPY package.json package-lock.json* ./
 
-# Install production dependencies only
+# Install all dependencies (including native builds)
 RUN npm install --omit=dev && npm cache clean --force
 
 # Copy application source
 COPY server.js ./
 COPY public/ ./public/
 
+# Create data directory for SQLite
+RUN mkdir -p /app/data
+
 # Set environment
 ENV NODE_ENV=production
 ENV PORT=8080
 
-# Expose port (Cloud Run uses PORT env variable)
 EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/health || exit 1
 
-# Run as non-root user for security
+# Run as non-root user
 RUN addgroup -g 1001 -S nodejs && \
-    adduser -S medicap -u 1001 -G nodejs
+    adduser -S medicap -u 1001 -G nodejs && \
+    chown -R medicap:nodejs /app/data
 USER medicap
 
-# Start the server
 CMD ["node", "server.js"]

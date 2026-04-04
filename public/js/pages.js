@@ -861,6 +861,36 @@ const Pages = {
                     ${Components.renderStatCard('description', 'Medical Records', Store.getRecords().length, 'orange')}
                 </div>
 
+                <div class="quick-actions stagger" style="margin-top:var(--space-4);">
+                    <button class="quick-action-btn fade-in" onclick="App.showAddDoctorForm()" id="qa-add-doctor">
+                        <div class="quick-action-icon" style="background: rgba(14,161,122,0.1); color: var(--primary-500);">
+                            <span class="material-icons-round">person_add</span>
+                        </div>
+                        <div>
+                            <div class="quick-action-label">Add New Doctor</div>
+                            <div class="quick-action-sub">Add doctor to directory</div>
+                        </div>
+                    </button>
+                    <button class="quick-action-btn fade-in" onclick="App.showAddPatientForm()" id="qa-add-patient">
+                        <div class="quick-action-icon" style="background: rgba(59,130,246,0.1); color: var(--info);">
+                            <span class="material-icons-round">group_add</span>
+                        </div>
+                        <div>
+                            <div class="quick-action-label">Add New Patient</div>
+                            <div class="quick-action-sub">Register patient account</div>
+                        </div>
+                    </button>
+                    <button class="quick-action-btn fade-in" onclick="App.refreshAdminData()" id="qa-refresh">
+                        <div class="quick-action-icon" style="background: rgba(245,158,11,0.1); color: var(--warning);">
+                            <span class="material-icons-round">sync</span>
+                        </div>
+                        <div>
+                            <div class="quick-action-label">Refresh Data</div>
+                            <div class="quick-action-sub">Reload all data</div>
+                        </div>
+                    </button>
+                </div>
+
                 <div class="dashboard-section fade-in" style="margin-top:var(--space-6);">
                     <div class="dashboard-section-header">
                         <h3 class="dashboard-section-title">
@@ -891,6 +921,7 @@ const Pages = {
             </div>
         `;
     },
+
 
 
     // ========== LOGIN PAGE ==========

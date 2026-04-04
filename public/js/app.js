@@ -510,6 +510,157 @@ const App = {
         } else {
             Components.showToast('error', 'Error', result.error || 'Could not change password.');
         }
+    },
+
+    // ========== ADMIN: ADD DOCTOR / PATIENT ==========
+    showAddDoctorForm() {
+        Components.showModal(
+            'Add New Doctor',
+            `<form id="add-doctor-form" onsubmit="App.submitAddDoctor(event)">
+                <div class="profile-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Doctor Name *</label>
+                        <input type="text" class="form-input" id="add-doc-name" placeholder="Dr. Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Specialty *</label>
+                        <select class="form-select" id="add-doc-specialty" required>
+                            <option value="">Select</option>
+                            <option>Cardiology</option><option>General Medicine</option>
+                            <option>Dermatology</option><option>Orthopedics</option>
+                            <option>Pediatrics</option><option>Neurology</option>
+                            <option>Gynecology</option><option>ENT</option>
+                            <option>Ophthalmology</option><option>Psychiatry</option>
+                            <option>Dentistry</option><option>Urology</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="profile-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Hospital</label>
+                        <input type="text" class="form-input" id="add-doc-hospital" placeholder="Hospital name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">City</label>
+                        <select class="form-select" id="add-doc-city">
+                            <option value="">Select City</option>
+                            ${typeof CITIES !== 'undefined' ? CITIES.map(c => '<option value="'+c.name+'">'+c.name+'</option>').join('') : ''}
+                        </select>
+                    </div>
+                </div>
+                <div class="profile-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Qualification</label>
+                        <input type="text" class="form-input" id="add-doc-qual" placeholder="MBBS, MD...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Experience (Years)</label>
+                        <input type="number" class="form-input" id="add-doc-exp" placeholder="10" min="0" max="50">
+                    </div>
+                </div>
+                <div class="profile-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Consultation Fee (₹)</label>
+                        <input type="number" class="form-input" id="add-doc-fee" placeholder="500" min="100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">About</label>
+                        <input type="text" class="form-input" id="add-doc-about" placeholder="Short description">
+                    </div>
+                </div>
+            </form>`,
+            `<button class="btn btn-secondary" onclick="Components.closeModal()">Cancel</button>
+             <button class="btn btn-primary" onclick="App.submitAddDoctor(event)">
+                <span class="material-icons-round" style="font-size:18px;">person_add</span> Add Doctor
+             </button>`
+        );
+    },
+
+    async submitAddDoctor(e) {
+        if (e) e.preventDefault();
+        const name = document.getElementById('add-doc-name')?.value?.trim();
+        const specialty = document.getElementById('add-doc-specialty')?.value;
+        if (!name || !specialty) { Components.showToast('error', 'Error', 'Name and specialty are required.'); return; }
+
+        try {
+            await Store.apiCall('/admin/doctors', 'POST', {
+                name, specialty,
+                hospital: document.getElementById('add-doc-hospital')?.value || '',
+                city: document.getElementById('add-doc-city')?.value || '',
+                qualification: document.getElementById('add-doc-qual')?.value || '',
+                experience: document.getElementById('add-doc-exp')?.value || 0,
+                fee: document.getElementById('add-doc-fee')?.value || 500,
+                about: document.getElementById('add-doc-about')?.value || ''
+            });
+            Components.closeModal();
+            Components.showToast('success', 'Doctor Added!', `${name} has been added to the directory.`);
+            await Store.fetchDoctors();
+            await Store.fetchAdminUsers();
+            this.renderPage('dashboard');
+        } catch (err) {
+            Components.showToast('error', 'Error', err.message || 'Could not add doctor.');
+        }
+    },
+
+    showAddPatientForm() {
+        Components.showModal(
+            'Add New Patient',
+            `<form id="add-patient-form" onsubmit="App.submitAddPatient(event)">
+                <div class="profile-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" class="form-input" id="add-pat-name" placeholder="Patient name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone *</label>
+                        <input type="tel" class="form-input" id="add-pat-phone" placeholder="+91 XXXXX XXXXX" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-input" id="add-pat-email" placeholder="patient@email.com" required>
+                </div>
+                <div class="profile-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">City</label>
+                        <select class="form-select" id="add-pat-city">
+                            <option value="">Select City</option>
+                            ${typeof CITIES !== 'undefined' ? CITIES.map(c => '<option value="'+c.name+'">'+c.name+'</option>').join('') : ''}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="text" class="form-input" id="add-pat-password" placeholder="Default: medicap123" value="medicap123">
+                    </div>
+                </div>
+            </form>`,
+            `<button class="btn btn-secondary" onclick="Components.closeModal()">Cancel</button>
+             <button class="btn btn-primary" onclick="App.submitAddPatient(event)">
+                <span class="material-icons-round" style="font-size:18px;">group_add</span> Add Patient
+             </button>`
+        );
+    },
+
+    async submitAddPatient(e) {
+        if (e) e.preventDefault();
+        const name = document.getElementById('add-pat-name')?.value?.trim();
+        const email = document.getElementById('add-pat-email')?.value?.trim();
+        const phone = document.getElementById('add-pat-phone')?.value?.trim();
+        if (!name || !email || !phone) { Components.showToast('error', 'Error', 'Name, email, and phone are required.'); return; }
+
+        try {
+            await Store.apiCall('/admin/patients', 'POST', {
+                name, email, phone,
+                city: document.getElementById('add-pat-city')?.value || '',
+                password: document.getElementById('add-pat-password')?.value || 'medicap123'
+            });
+            Components.closeModal();
+            Components.showToast('success', 'Patient Added!', `${name} has been registered.`);
+            await Store.fetchAdminUsers();
+            this.renderPage('dashboard');
+        } catch (err) {
+            Components.showToast('error', 'Error', err.message || 'Could not add patient.');
+        }
     }
 };
 

@@ -1,17 +1,18 @@
 {
   "name": "medicap",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "MediCap - Doctor & Patient Management System for Gujarat and India",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js"
   },
-  "keywords": ["healthcare", "doctor", "patient", "appointments", "medical-records", "gujarat"],
+  "keywords": ["healthcare", "doctor", "patient", "appointments", "medical-records", "gujarat", "india"],
   "author": "MediCap Team",
   "license": "MIT",
   "dependencies": {
     "express": "^4.21.0",
+    "better-sqlite3": "^11.0.0",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
     "uuid": "^9.0.1",
