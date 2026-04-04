@@ -1,6 +1,6 @@
 /* ============================================
    MediCap — Main Application Controller
-   (API-integrated version)
+   v2.0 — Role-based Auth (Patient/Doctor/Admin)
    ============================================ */
 
 const App = {
@@ -16,6 +16,12 @@ const App = {
         this.bindTheme();
         this.bindMobileNav();
         this.bindScroll();
+
+        // If admin, load admin data
+        if (Store.state.isAuthenticated && Store.state.currentUser?.role === 'admin') {
+            await Store.fetchAdminUsers();
+        }
+
         this.renderPage('home');
         this.hidePreloader();
     },
@@ -73,7 +79,6 @@ const App = {
             mobileOverlay.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         };
-
         const closeMobile = () => {
             mobileNav.classList.add('hidden');
             mobileOverlay.classList.add('hidden');
@@ -200,6 +205,19 @@ const App = {
         Components.showToast('success', 'Cancelled', 'Your appointment has been cancelled.');
     },
 
+    // Doctor: mark appointment as completed
+    async completeAppointment(id) {
+        try {
+            await Store.apiCall(`/appointments/${id}/complete`, 'PUT');
+            const apt = Store.state.appointments.find(a => a.id === id);
+            if (apt) apt.status = 'completed';
+            this.renderPage('dashboard');
+            Components.showToast('success', 'Completed', 'Appointment marked as completed.');
+        } catch (err) {
+            Components.showToast('error', 'Error', err.message || 'Could not complete appointment.');
+        }
+    },
+
     rescheduleAppointment(id) {
         Components.showToast('info', 'Reschedule', 'Please cancel and rebook to reschedule your appointment.');
     },
@@ -231,7 +249,6 @@ const App = {
 
     async submitBooking(e) {
         e.preventDefault();
-
         const name = document.getElementById('booking-name').value;
         const phone = document.getElementById('booking-phone').value;
         const date = document.getElementById('booking-date').value;
@@ -240,14 +257,8 @@ const App = {
         const notes = document.getElementById('booking-notes').value;
         const doctorId = document.getElementById('booking-doctor-id').value;
 
-        if (!time) {
-            Components.showToast('error', 'Time Required', 'Please select a time slot.');
-            return;
-        }
-        if (!date) {
-            Components.showToast('error', 'Date Required', 'Please select a date.');
-            return;
-        }
+        if (!time) { Components.showToast('error', 'Time Required', 'Please select a time slot.'); return; }
+        if (!date) { Components.showToast('error', 'Date Required', 'Please select a date.'); return; }
 
         const btn = document.getElementById('confirm-booking-btn');
         btn.disabled = true;
@@ -263,15 +274,20 @@ const App = {
     // ========== AUTH ==========
     async handleLogin(e) {
         e.preventDefault();
-        const email = document.getElementById('login-email').value;
+        const email = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value;
 
+        // Validation
         if (!email || !password) {
             Components.showToast('error', 'Error', 'Please fill in all fields.');
             return;
         }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            Components.showToast('error', 'Invalid Email', 'Please enter a valid email address.');
+            return;
+        }
 
-        // Show loading
         const btn = document.getElementById('login-submit-btn');
         const originalText = btn.innerHTML;
         btn.disabled = true;
@@ -280,7 +296,15 @@ const App = {
         const result = await Store.login(email, password);
 
         if (result.success) {
-            Components.showToast('success', 'Welcome!', `Logged in as ${result.user.name}`);
+            const role = result.user.role;
+            const roleLabel = role === 'admin' ? 'Administrator' : role === 'doctor' ? 'Doctor' : 'Patient';
+            Components.showToast('success', `Welcome, ${roleLabel}!`, `Logged in as ${result.user.name}`);
+
+            // Load admin data if admin
+            if (role === 'admin') {
+                await Store.fetchAdminUsers();
+            }
+
             if (result.offline) {
                 Components.showToast('info', 'Offline Mode', 'Running in demo mode — data saved locally.');
             }
@@ -294,18 +318,31 @@ const App = {
 
     async handleRegister(e) {
         e.preventDefault();
-        const name = document.getElementById('register-name').value;
-        const email = document.getElementById('register-email').value;
-        const phone = document.getElementById('register-phone').value;
+        const name = document.getElementById('register-name').value.trim();
+        const email = document.getElementById('register-email').value.trim();
+        const phone = document.getElementById('register-phone').value.trim();
         const city = document.getElementById('register-city').value;
         const role = document.getElementById('register-role').value;
         const password = document.getElementById('register-password').value;
 
+        // Validation
         if (!name || !email || !phone || !city || !password) {
-            Components.showToast('error', 'Error', 'Please fill in all required fields.');
+            Components.showToast('error', 'Missing Fields', 'Please fill in all required fields.');
             return;
         }
-
+        if (name.length < 2) {
+            Components.showToast('error', 'Invalid Name', 'Name must be at least 2 characters.');
+            return;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            Components.showToast('error', 'Invalid Email', 'Please enter a valid email address.');
+            return;
+        }
+        if (phone.replace(/[\s-]/g, '').length < 10) {
+            Components.showToast('error', 'Invalid Phone', 'Please enter a valid phone number (10+ digits).');
+            return;
+        }
         if (password.length < 6) {
             Components.showToast('error', 'Weak Password', 'Password must be at least 6 characters.');
             return;
@@ -319,11 +356,23 @@ const App = {
         const result = await Store.register({ name, email, phone, city, role, password });
 
         if (result.success) {
-            Components.showToast('success', 'Account Created!', `Welcome to MediCap, ${result.user.name}!`);
+            const roleLabel = role === 'admin' ? 'Administrator' : role === 'doctor' ? 'Doctor' : 'Patient';
+            Components.showToast('success', 'Account Created!', `Welcome to MediCap as ${roleLabel}!`);
+
+            if (role === 'admin') {
+                await Store.fetchAdminUsers();
+            }
+
             if (result.offline) {
                 Components.showToast('info', 'Offline Mode', 'Running in demo mode — data saved locally.');
             }
-            setTimeout(() => this.navigateTo('dashboard'), 1000);
+
+            // Show verification notice
+            setTimeout(() => {
+                Components.showToast('info', 'Verification', 'Please verify your account from your Dashboard.');
+            }, 2000);
+
+            setTimeout(() => this.navigateTo('dashboard'), 1500);
         } else {
             btn.disabled = false;
             btn.innerHTML = originalText;
@@ -341,6 +390,78 @@ const App = {
         Store.logout();
         Components.showToast('info', 'Logged Out', 'You have been signed out successfully.');
         this.navigateTo('home');
+    },
+
+    // ========== VERIFICATION ==========
+    async verifyAccount() {
+        try {
+            const result = await Store.apiCall('/auth/verify', 'POST');
+            if (result && result.verified) {
+                Store.state.currentUser.verified = true;
+                localStorage.setItem('medicap_user', JSON.stringify(Store.state.currentUser));
+                Components.showToast('success', 'Verified!', 'Your account has been verified successfully.');
+                this.renderPage('dashboard');
+            }
+        } catch (err) {
+            // Offline fallback
+            Store.state.currentUser.verified = true;
+            localStorage.setItem('medicap_user', JSON.stringify(Store.state.currentUser));
+            Components.showToast('success', 'Verified!', 'Your account has been verified.');
+            this.renderPage('dashboard');
+        }
+    },
+
+    // ========== ADMIN ACTIONS ==========
+    async adminVerifyUser(userId) {
+        try {
+            await Store.apiCall(`/admin/users/${userId}/verify`, 'PUT');
+            Components.showToast('success', 'Verified', 'User has been verified.');
+            await Store.fetchAdminUsers();
+            this.renderPage('dashboard');
+        } catch (err) {
+            Components.showToast('error', 'Error', err.message || 'Could not verify user.');
+        }
+    },
+
+    async adminToggleUser(userId) {
+        try {
+            const result = await Store.apiCall(`/admin/users/${userId}/toggle`, 'PUT');
+            Components.showToast('success', 'Updated', result.message || 'User status updated.');
+            await Store.fetchAdminUsers();
+            this.renderPage('dashboard');
+        } catch (err) {
+            Components.showToast('error', 'Error', err.message || 'Could not update user.');
+        }
+    },
+
+    async adminDeleteUser(userId) {
+        Components.showModal(
+            'Delete User',
+            `<p style="color:var(--text-secondary); margin-bottom:var(--space-4);">Are you sure you want to delete this user? This will remove all their appointments and records. This action cannot be undone.</p>`,
+            `<button class="btn btn-secondary" onclick="Components.closeModal()">Cancel</button>
+             <button class="btn btn-danger" onclick="App.confirmDeleteUser('${userId}')">Yes, Delete</button>`
+        );
+    },
+
+    async confirmDeleteUser(userId) {
+        try {
+            await Store.apiCall(`/admin/users/${userId}`, 'DELETE');
+            Components.closeModal();
+            Components.showToast('success', 'Deleted', 'User has been removed.');
+            await Store.fetchAdminUsers();
+            this.renderPage('dashboard');
+        } catch (err) {
+            Components.closeModal();
+            Components.showToast('error', 'Error', err.message || 'Could not delete user.');
+        }
+    },
+
+    async refreshAdminData() {
+        Components.showToast('info', 'Refreshing', 'Loading latest data...');
+        await Store.fetchAdminUsers();
+        await Store.fetchAppointments();
+        this.renderPage('dashboard');
+        Components.showToast('success', 'Refreshed', 'Data updated.');
     },
 
     // ========== PROFILE ==========
@@ -376,7 +497,6 @@ const App = {
             Components.showToast('error', 'Error', 'Please fill in both password fields.');
             return;
         }
-
         if (newPass.length < 6) {
             Components.showToast('error', 'Weak Password', 'New password must be at least 6 characters.');
             return;

@@ -563,19 +563,35 @@ const Pages = {
 
     // ========== DASHBOARD PAGE ==========
     dashboard() {
+        const user = Store.state.currentUser;
+        if (!user) return Pages.login();
+
+        const role = user.role || 'patient';
+        if (role === 'admin') return this._adminDashboard(user);
+        if (role === 'doctor') return this._doctorDashboard(user);
+        return this._patientDashboard(user);
+    },
+
+    // ---------- PATIENT DASHBOARD ----------
+    _patientDashboard(user) {
         const stats = Store.getStats();
         const appointments = Store.getAppointments();
         const recent = appointments.slice(0, 4);
-        const user = Store.state.currentUser;
         const greeting = new Date().getHours() < 12 ? 'Good Morning' : new Date().getHours() < 17 ? 'Good Afternoon' : 'Good Evening';
-        const userName = user ? user.name : 'User';
+
+        const verifiedBadge = user.verified
+            ? '<span class="badge badge-success" style="margin-left:8px;"><span class="material-icons-round" style="font-size:14px;">verified</span> Verified</span>'
+            : '<span class="badge badge-warning" style="margin-left:8px;cursor:pointer;" onclick="App.verifyAccount()"><span class="material-icons-round" style="font-size:14px;">pending</span> Verify Now</span>';
 
         return `
             <div class="page-header">
                 <div class="page-header-content">
-                    <h1 class="page-title">${greeting}, ${userName}! 👋</h1>
-                    <p class="page-subtitle">Here's an overview of your health management dashboard</p>
+                    <h1 class="page-title">${greeting}, ${user.name}! 👋 ${verifiedBadge}</h1>
+                    <p class="page-subtitle">Patient Dashboard — Manage your health and appointments</p>
                 </div>
+                <span class="badge badge-info" style="font-size:0.85rem;padding:8px 16px;">
+                    <span class="material-icons-round" style="font-size:16px;">person</span> Patient
+                </span>
             </div>
             <div class="dashboard-layout">
                 <div class="dashboard-stats stagger">
@@ -632,8 +648,7 @@ const Pages = {
                                 Recent Appointments
                             </h3>
                             <button class="btn btn-ghost btn-sm" onclick="App.navigateTo('appointments')" id="view-all-appointments">
-                                View All
-                                <span class="material-icons-round" style="font-size:16px;">arrow_forward</span>
+                                View All <span class="material-icons-round" style="font-size:16px;">arrow_forward</span>
                             </button>
                         </div>
                         <div class="appointments-list">
@@ -643,7 +658,6 @@ const Pages = {
                             }
                         </div>
                     </div>
-
                     <div class="dashboard-section">
                         <div class="dashboard-section-header">
                             <h3 class="dashboard-section-title">
@@ -653,47 +667,231 @@ const Pages = {
                         </div>
                         <div class="activity-list">
                             <div class="activity-item">
-                                <div class="activity-dot green">
-                                    <span class="material-icons-round">check</span>
-                                </div>
-                                <div>
-                                    <div class="activity-text"><strong>Appointment completed</strong> with Dr. Priya Sharma</div>
-                                    <div class="activity-time">2 days ago</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-dot blue">
-                                    <span class="material-icons-round">description</span>
-                                </div>
-                                <div>
-                                    <div class="activity-text"><strong>Medical record</strong> updated by Dr. Rajesh Patel</div>
-                                    <div class="activity-time">5 days ago</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-dot orange">
-                                    <span class="material-icons-round">medication</span>
-                                </div>
-                                <div>
-                                    <div class="activity-text"><strong>Prescription renewed</strong> — Amlodipine 5mg</div>
-                                    <div class="activity-time">1 week ago</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-dot green">
-                                    <span class="material-icons-round">person_add</span>
-                                </div>
+                                <div class="activity-dot green"><span class="material-icons-round">check</span></div>
                                 <div>
                                     <div class="activity-text"><strong>Account created</strong> — Welcome to MediCap!</div>
-                                    <div class="activity-time">2 weeks ago</div>
+                                    <div class="activity-time">Today</div>
                                 </div>
                             </div>
+                            ${user.verified ? `<div class="activity-item">
+                                <div class="activity-dot green"><span class="material-icons-round">verified</span></div>
+                                <div>
+                                    <div class="activity-text"><strong>Account verified</strong> — Full access enabled</div>
+                                    <div class="activity-time">Today</div>
+                                </div>
+                            </div>` : `<div class="activity-item">
+                                <div class="activity-dot orange"><span class="material-icons-round">pending</span></div>
+                                <div>
+                                    <div class="activity-text"><strong>Verification pending</strong> — Click to verify your account</div>
+                                    <div class="activity-time"><a href="#" onclick="App.verifyAccount()" style="color:var(--primary-500);font-weight:600;">Verify Now →</a></div>
+                                </div>
+                            </div>`}
                         </div>
                     </div>
                 </div>
             </div>
         `;
     },
+
+    // ---------- DOCTOR DASHBOARD ----------
+    _doctorDashboard(user) {
+        const appointments = Store.getAppointments();
+        const upcoming = appointments.filter(a => a.status === 'confirmed');
+        const completed = appointments.filter(a => a.status === 'completed');
+        const greeting = new Date().getHours() < 12 ? 'Good Morning' : new Date().getHours() < 17 ? 'Good Afternoon' : 'Good Evening';
+
+        const verifiedBadge = user.verified
+            ? '<span class="badge badge-success" style="margin-left:8px;"><span class="material-icons-round" style="font-size:14px;">verified</span> Verified Doctor</span>'
+            : '<span class="badge badge-warning" style="margin-left:8px;cursor:pointer;" onclick="App.verifyAccount()"><span class="material-icons-round" style="font-size:14px;">pending</span> Pending Verification</span>';
+
+        const appointmentRows = upcoming.slice(0, 5).map(a => {
+            const doctor = Store.getDoctorById(a.doctorId);
+            return `<tr>
+                <td style="font-weight:600;">${a.patientName || 'Patient'}</td>
+                <td>${new Date(a.date).toLocaleDateString('en-IN', {day:'numeric',month:'short'})}</td>
+                <td>${a.time}</td>
+                <td>${a.type}</td>
+                <td><span class="badge badge-success">Confirmed</span></td>
+                <td>
+                    <button class="btn btn-ghost btn-sm" onclick="App.completeAppointment('${a.id}')" title="Mark Complete">
+                        <span class="material-icons-round" style="color:var(--success);font-size:18px;">check_circle</span>
+                    </button>
+                </td>
+            </tr>`;
+        }).join('');
+
+        return `
+            <div class="page-header">
+                <div class="page-header-content">
+                    <h1 class="page-title">${greeting}, ${user.name}! 🩺 ${verifiedBadge}</h1>
+                    <p class="page-subtitle">Doctor Dashboard — Manage your patients and appointments</p>
+                </div>
+                <span class="badge badge-info" style="font-size:0.85rem;padding:8px 16px;background:rgba(14,161,122,0.15);color:var(--primary-600);">
+                    <span class="material-icons-round" style="font-size:16px;">medical_services</span> Doctor
+                </span>
+            </div>
+            <div class="dashboard-layout">
+                <div class="dashboard-stats stagger">
+                    ${Components.renderStatCard('people', 'Today\'s Patients', upcoming.length, 'teal')}
+                    ${Components.renderStatCard('calendar_today', 'Upcoming', upcoming.length, 'blue')}
+                    ${Components.renderStatCard('task_alt', 'Completed', completed.length, 'green')}
+                    ${Components.renderStatCard('description', 'Records Created', Store.getRecords().length, 'orange')}
+                </div>
+
+                <div class="quick-actions stagger">
+                    <button class="quick-action-btn fade-in" onclick="App.navigateTo('appointments')" id="qa-my-schedule">
+                        <div class="quick-action-icon" style="background: rgba(14,161,122,0.1); color: var(--primary-500);">
+                            <span class="material-icons-round">event_note</span>
+                        </div>
+                        <div>
+                            <div class="quick-action-label">My Schedule</div>
+                            <div class="quick-action-sub">View patient appointments</div>
+                        </div>
+                    </button>
+                    <button class="quick-action-btn fade-in" onclick="App.navigateTo('records')" id="qa-patient-records">
+                        <div class="quick-action-icon" style="background: rgba(245,158,11,0.1); color: var(--warning);">
+                            <span class="material-icons-round">folder_shared</span>
+                        </div>
+                        <div>
+                            <div class="quick-action-label">Patient Records</div>
+                            <div class="quick-action-sub">View & create records</div>
+                        </div>
+                    </button>
+                    <button class="quick-action-btn fade-in" onclick="App.navigateTo('profile')" id="qa-doc-profile">
+                        <div class="quick-action-icon" style="background: rgba(139,92,246,0.1); color: #8b5cf6;">
+                            <span class="material-icons-round">account_circle</span>
+                        </div>
+                        <div>
+                            <div class="quick-action-label">My Profile</div>
+                            <div class="quick-action-sub">Update credentials</div>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="dashboard-section fade-in" style="margin-top:var(--space-6);">
+                    <div class="dashboard-section-header">
+                        <h3 class="dashboard-section-title">
+                            <span class="material-icons-round">event_available</span>
+                            Upcoming Appointments
+                        </h3>
+                    </div>
+                    ${upcoming.length > 0 ? `
+                    <div style="overflow-x:auto;">
+                        <table class="data-table" style="width:100%;border-collapse:separate;border-spacing:0;">
+                            <thead>
+                                <tr style="background:var(--bg-secondary);">
+                                    <th style="padding:12px 16px;text-align:left;font-weight:600;">Patient</th>
+                                    <th style="padding:12px 16px;text-align:left;font-weight:600;">Date</th>
+                                    <th style="padding:12px 16px;text-align:left;font-weight:600;">Time</th>
+                                    <th style="padding:12px 16px;text-align:left;font-weight:600;">Type</th>
+                                    <th style="padding:12px 16px;text-align:left;font-weight:600;">Status</th>
+                                    <th style="padding:12px 16px;text-align:left;font-weight:600;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>${appointmentRows}</tbody>
+                        </table>
+                    </div>` : Components.renderEmptyState('calendar_today', 'No Appointments Yet', 'Patients will appear here when they book with you.')}
+                </div>
+            </div>
+        `;
+    },
+
+    // ---------- ADMIN DASHBOARD ----------
+    _adminDashboard(user) {
+        const greeting = new Date().getHours() < 12 ? 'Good Morning' : new Date().getHours() < 17 ? 'Good Afternoon' : 'Good Evening';
+        const allUsers = Store.state.adminUsers || [];
+        const patients = allUsers.filter(u => u.role === 'patient');
+        const doctors = allUsers.filter(u => u.role === 'doctor');
+        const unverified = allUsers.filter(u => !u.verified);
+        const appointments = Store.getAppointments();
+
+        const userRows = allUsers.filter(u => u.role !== 'admin').map(u => {
+            const verifyBadge = u.verified
+                ? '<span class="badge badge-success" style="font-size:0.7rem;"><span class="material-icons-round" style="font-size:12px;">verified</span> Verified</span>'
+                : '<span class="badge badge-warning" style="font-size:0.7rem;">Unverified</span>';
+            const statusBadge = u.active
+                ? '<span class="badge badge-success" style="font-size:0.7rem;">Active</span>'
+                : '<span class="badge badge-error" style="font-size:0.7rem;">Inactive</span>';
+            const roleBadge = u.role === 'doctor'
+                ? '<span class="badge" style="background:rgba(14,161,122,0.15);color:var(--primary-600);font-size:0.7rem;">Doctor</span>'
+                : '<span class="badge badge-info" style="font-size:0.7rem;">Patient</span>';
+
+            return `<tr>
+                <td style="font-weight:600;">${u.name}</td>
+                <td style="font-size:0.85rem;">${u.email}</td>
+                <td>${roleBadge}</td>
+                <td>${verifyBadge}</td>
+                <td>${statusBadge}</td>
+                <td style="display:flex;gap:4px;">
+                    ${!u.verified ? `<button class="btn btn-ghost btn-sm" onclick="App.adminVerifyUser('${u.id}')" title="Verify">
+                        <span class="material-icons-round" style="color:var(--success);font-size:18px;">verified</span>
+                    </button>` : ''}
+                    <button class="btn btn-ghost btn-sm" onclick="App.adminToggleUser('${u.id}')" title="${u.active ? 'Deactivate' : 'Activate'}">
+                        <span class="material-icons-round" style="color:${u.active ? 'var(--error)' : 'var(--success)'};font-size:18px;">${u.active ? 'block' : 'check_circle'}</span>
+                    </button>
+                    <button class="btn btn-ghost btn-sm" onclick="App.adminDeleteUser('${u.id}')" title="Delete">
+                        <span class="material-icons-round" style="color:var(--error);font-size:18px;">delete</span>
+                    </button>
+                </td>
+            </tr>`;
+        }).join('');
+
+        return `
+            <div class="page-header">
+                <div class="page-header-content">
+                    <h1 class="page-title">${greeting}, Admin! 🛡️</h1>
+                    <p class="page-subtitle">Admin Control Panel — Manage users, doctors, and appointments</p>
+                </div>
+                <span class="badge" style="font-size:0.85rem;padding:8px 16px;background:rgba(239,68,68,0.15);color:#dc2626;">
+                    <span class="material-icons-round" style="font-size:16px;">admin_panel_settings</span> Administrator
+                </span>
+            </div>
+            <div class="dashboard-layout">
+                <div class="dashboard-stats stagger">
+                    ${Components.renderStatCard('people', 'Total Users', allUsers.length, 'teal')}
+                    ${Components.renderStatCard('person', 'Patients', patients.length, 'blue')}
+                    ${Components.renderStatCard('medical_services', 'Doctors', doctors.length, 'green')}
+                    ${Components.renderStatCard('warning', 'Unverified', unverified.length, 'orange')}
+                </div>
+
+                <div class="dashboard-stats stagger" style="margin-top:var(--space-4);">
+                    ${Components.renderStatCard('calendar_today', 'Total Appointments', appointments.length, 'teal')}
+                    ${Components.renderStatCard('local_hospital', 'Registered Doctors', Store.state.doctors.length, 'green')}
+                    ${Components.renderStatCard('location_city', 'Cities Served', [...new Set(Store.state.doctors.map(d => d.city))].length, 'blue')}
+                    ${Components.renderStatCard('description', 'Medical Records', Store.getRecords().length, 'orange')}
+                </div>
+
+                <div class="dashboard-section fade-in" style="margin-top:var(--space-6);">
+                    <div class="dashboard-section-header">
+                        <h3 class="dashboard-section-title">
+                            <span class="material-icons-round">manage_accounts</span>
+                            User Management
+                        </h3>
+                        <button class="btn btn-ghost btn-sm" onclick="App.refreshAdminData()" id="refresh-admin">
+                            <span class="material-icons-round" style="font-size:16px;">refresh</span> Refresh
+                        </button>
+                    </div>
+                    ${allUsers.filter(u => u.role !== 'admin').length > 0 ? `
+                    <div style="overflow-x:auto;">
+                        <table class="data-table" style="width:100%;border-collapse:separate;border-spacing:0;">
+                            <thead>
+                                <tr style="background:var(--bg-secondary);">
+                                    <th style="padding:12px 16px;text-align:left;font-weight:600;">Name</th>
+                                    <th style="padding:12px 16px;text-align:left;font-weight:600;">Email</th>
+                                    <th style="padding:12px 16px;text-align:left;font-weight:600;">Role</th>
+                                    <th style="padding:12px 16px;text-align:left;font-weight:600;">Verified</th>
+                                    <th style="padding:12px 16px;text-align:left;font-weight:600;">Status</th>
+                                    <th style="padding:12px 16px;text-align:left;font-weight:600;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>${userRows}</tbody>
+                        </table>
+                    </div>` : Components.renderEmptyState('people', 'No Users Yet', 'Users will appear here when they register.')}
+                </div>
+            </div>
+        `;
+    },
+
 
     // ========== LOGIN PAGE ==========
     login() {
@@ -760,6 +958,10 @@ const Pages = {
                                 <div class="role-option" onclick="App.selectRole(this, 'doctor')" id="role-doctor">
                                     <span class="material-icons-round">medical_services</span>
                                     <div class="role-label">Doctor</div>
+                                </div>
+                                <div class="role-option" onclick="App.selectRole(this, 'admin')" id="role-admin">
+                                    <span class="material-icons-round">admin_panel_settings</span>
+                                    <div class="role-label">Admin</div>
                                 </div>
                             </div>
                             <input type="hidden" id="register-role" value="patient">

@@ -16,6 +16,7 @@ const Store = {
         doctors: [],
         appointments: [],
         records: [],
+        adminUsers: [],
         filters: {
             specialty: 'All',
             city: 'All',
@@ -376,6 +377,19 @@ const Store = {
 
     getRecords() {
         return [...this.state.records].sort((a, b) => new Date(b.date) - new Date(a.date));
+    },
+
+    // ==================== ADMIN ====================
+    async fetchAdminUsers() {
+        try {
+            const data = await this.apiCall('/admin/users');
+            if (data && data.users) {
+                this.state.adminUsers = data.users;
+                return;
+            }
+        } catch (err) {
+            console.warn('Could not fetch admin users');
+        }
     },
 
     // ==================== STATS ====================
