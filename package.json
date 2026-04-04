@@ -36,7 +36,11 @@
     "@google/generative-ai": "^0.2.1",
     "googleapis": "^133.0.0",
     "express-rate-limit": "^7.1.5",
-    "compression": "^1.7.4"
+    "compression": "^1.7.4",
+    "xss-clean": "^0.1.4",
+    "hpp": "^0.2.3",
+    "apicache": "^1.6.3",
+    "cookie-parser": "^1.4.6"
   },
   "devDependencies": {
     "jest": "^29.7.0",

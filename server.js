@@ -15,6 +15,11 @@ const path = require('path');
 const fs = require('fs');
 const rateLimit = require('express-rate-limit');
 const compression = require('compression');
+const xss = require('xss-clean');
+const hpp = require('hpp');
+const apicache = require('apicache');
+const cookieParser = require('cookie-parser');
+const cache = apicache.middleware;
 
 // Google Cloud Services
 let gcloud = null;
@@ -82,9 +87,22 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(morgan('combined'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10kb' })); // SECURITY: Body parser limit
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// SECURITY: Prevent Cross-Site Scripting (XSS)
+app.use(xss());
+
+// SECURITY: Prevent HTTP Parameter Pollution
+app.use(hpp());
+
+// SECURITY: Parse Cookies securely
+app.use(cookieParser());
+
+// EFFICIENCY: Cache static or slow data endpoints
+app.use('/api/stats', cache('5 minutes'));
+app.use('/api/health', cache('1 minute'));
 
 // Google Cloud request logging
 if (gcloud && gcloud.requestLogger) app.use(gcloud.requestLogger);
