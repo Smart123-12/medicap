@@ -11,11 +11,6 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  SERVICE_NAME: medicap
-  REGION: asia-south1  # Mumbai region (closest to Gujarat)
-  
 jobs:
   # ========== BUILD & TEST ==========
   test:
@@ -47,6 +42,11 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    env:
+      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      SERVICE_NAME: medicap
+      REGION: asia-south1
     
     permissions:
       contents: read

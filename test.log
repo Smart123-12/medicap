@@ -1,0 +1,214 @@
+
+> medicap@3.1.0 test
+> start-server-and-test start http://localhost:8080 "node tests/api.test.js && jest tests/server.test.js"
+
+1: starting server using command "npm run start"
+and when url "[ 'http://localhost:8080' ]" is responding with HTTP status code 200
+running tests using command "node tests/api.test.js && jest tests/server.test.js"
+
+
+> medicap@3.1.0 start
+> node server.js
+
+✅ Admin user seeded
+✅ 12 doctors seeded
+
+╔═══════════════════════════════════════════════╗
+║      🏥 MediCap Server v3.0                  ║
+║      Port: 8080                                ║
+║      DB:   In-Memory             ║
+║      ENV:  development                  ║
+║      URL:  http://localhost:8080                ║
+║                                               ║
+║      Admin:  admin@medicap.com / admin123     ║
+╚═══════════════════════════════════════════════╝
+        
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "HEAD / HTTP/1.1" 200 11022 "-" "axios/1.14.0"
+
+🧪 MediCap API Test Suite
+
+==================================================
+
+📋 Health Check Tests:
+{"severity":"INFO","message":"GET /api/health","timestamp":"2026-04-05T12:38:21.133Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/health","status":200,"remoteIp":"127.0.0.1","latency":"1ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/health HTTP/1.1" 200 358 "-" "-"
+  ✅ GET /api/health returns 200
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/health HTTP/1.1" 200 358 "-" "-"
+  ✅ Health check returns version
+  ✅ Health check returns database type
+
+🔐 Authentication Tests:
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/health HTTP/1.1" 200 358 "-" "-"
+{"severity":"INFO","message":"POST /api/auth/login","timestamp":"2026-04-05T12:38:21.211Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/auth/login","status":200,"remoteIp":"127.0.0.1","latency":"60ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/auth/login HTTP/1.1" 200 523 "-" "-"
+  ✅ POST /api/auth/login with admin credentials
+{"severity":"INFO","message":"POST /api/auth/login","timestamp":"2026-04-05T12:38:21.272Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/auth/login","status":401,"remoteIp":"127.0.0.1","latency":"59ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/auth/login HTTP/1.1" 401 38 "-" "-"
+  ✅ Login fails with wrong password
+{"severity":"INFO","message":"POST /api/auth/login","timestamp":"2026-04-05T12:38:21.273Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/auth/login","status":401,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/auth/login HTTP/1.1" 401 38 "-" "-"
+  ✅ Login fails with non-existent email
+{"severity":"INFO","message":"POST /api/auth/login","timestamp":"2026-04-05T12:38:21.274Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/auth/login","status":400,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/auth/login HTTP/1.1" 400 44 "-" "-"
+  ✅ Login fails with empty fields
+{"severity":"INFO","message":"POST /api/auth/register","timestamp":"2026-04-05T12:38:21.338Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/auth/register","status":201,"remoteIp":"127.0.0.1","latency":"63ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/auth/register HTTP/1.1" 201 689 "-" "-"
+  ✅ Register new patient
+{"severity":"INFO","message":"POST /api/auth/register","timestamp":"2026-04-05T12:38:21.402Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/auth/register","status":201,"remoteIp":"127.0.0.1","latency":"62ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/auth/register HTTP/1.1" 201 681 "-" "-"
+  ✅ Register new doctor
+{"severity":"INFO","message":"POST /api/auth/register","timestamp":"2026-04-05T12:38:21.403Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/auth/register","status":409,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/auth/register HTTP/1.1" 409 54 "-" "-"
+  ✅ Register fails with duplicate email
+{"severity":"INFO","message":"POST /api/auth/register","timestamp":"2026-04-05T12:38:21.405Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/auth/register","status":400,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/auth/register HTTP/1.1" 400 51 "-" "-"
+  ✅ Register fails with short password
+{"severity":"INFO","message":"POST /api/auth/register","timestamp":"2026-04-05T12:38:21.406Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/auth/register","status":400,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/auth/register HTTP/1.1" 400 34 "-" "-"
+  ✅ Register fails with invalid email
+{"severity":"INFO","message":"GET /api/auth/me","timestamp":"2026-04-05T12:38:21.408Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/auth/me","status":200,"remoteIp":"127.0.0.1","latency":"1ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/auth/me HTTP/1.1" 200 245 "-" "-"
+  ✅ GET /api/auth/me returns current user
+{"severity":"INFO","message":"GET /api/auth/me","timestamp":"2026-04-05T12:38:21.408Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/auth/me","status":401,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/auth/me HTTP/1.1" 401 45 "-" "-"
+  ✅ GET /api/auth/me fails without token
+{"severity":"INFO","message":"GET /api/auth/me","timestamp":"2026-04-05T12:38:21.409Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/auth/me","status":403,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/auth/me HTTP/1.1" 403 37 "-" "-"
+  ✅ GET /api/auth/me fails with invalid token
+{"severity":"INFO","message":"PUT /api/auth/profile","timestamp":"2026-04-05T12:38:21.411Z","service":"medicap-api","httpRequest":{"requestMethod":"PUT","requestUrl":"/api/auth/profile","status":200,"remoteIp":"127.0.0.1","latency":"1ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "PUT /api/auth/profile HTTP/1.1" 200 367 "-" "-"
+  ✅ PUT /api/auth/profile updates user
+{"severity":"INFO","message":"POST /api/auth/verify","timestamp":"2026-04-05T12:38:21.412Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/auth/verify","status":200,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/auth/verify HTTP/1.1" 200 47 "-" "-"
+  ✅ POST /api/auth/verify verifies account
+{"severity":"INFO","message":"PUT /api/auth/password","timestamp":"2026-04-05T12:38:21.530Z","service":"medicap-api","httpRequest":{"requestMethod":"PUT","requestUrl":"/api/auth/password","status":200,"remoteIp":"127.0.0.1","latency":"116ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "PUT /api/auth/password HTTP/1.1" 200 44 "-" "-"
+  ✅ PUT /api/auth/password changes password
+{"severity":"INFO","message":"PUT /api/auth/password","timestamp":"2026-04-05T12:38:21.590Z","service":"medicap-api","httpRequest":{"requestMethod":"PUT","requestUrl":"/api/auth/password","status":401,"remoteIp":"127.0.0.1","latency":"59ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "PUT /api/auth/password HTTP/1.1" 401 42 "-" "-"
+  ✅ Password change fails with wrong current password
+
+🩺 Doctor API Tests:
+{"severity":"INFO","message":"GET /api/doctors","timestamp":"2026-04-05T12:38:21.591Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/doctors","status":200,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/doctors HTTP/1.1" 200 3763 "-" "-"
+  ✅ GET /api/doctors returns doctors list
+{"severity":"INFO","message":"GET /api/doctors/doc-001","timestamp":"2026-04-05T12:38:21.593Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/doctors/doc-001","status":200,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/doctors/doc-001 HTTP/1.1" 200 362 "-" "-"
+  ✅ GET /api/doctors/:id returns single doctor
+{"severity":"INFO","message":"GET /api/doctors/invalid-id","timestamp":"2026-04-05T12:38:21.594Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/doctors/invalid-id","status":404,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/doctors/invalid-id HTTP/1.1" 404 29 "-" "-"
+  ✅ GET /api/doctors/:id returns 404 for invalid id
+{"severity":"INFO","message":"GET /api/doctors","timestamp":"2026-04-05T12:38:21.595Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/doctors","status":200,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/doctors HTTP/1.1" 200 3763 "-" "-"
+  ✅ Doctor filtering by specialty works
+{"severity":"INFO","message":"GET /api/doctors","timestamp":"2026-04-05T12:38:21.597Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/doctors","status":200,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/doctors HTTP/1.1" 200 3763 "-" "-"
+  ✅ Doctor filtering by city works
+{"severity":"INFO","message":"GET /api/doctors","timestamp":"2026-04-05T12:38:21.598Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/doctors","status":200,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/doctors HTTP/1.1" 200 3763 "-" "-"
+  ✅ Doctor search works
+
+📅 Appointment Tests:
+{"severity":"INFO","message":"POST /api/appointments","timestamp":"2026-04-05T12:38:21.600Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/appointments","status":201,"remoteIp":"127.0.0.1","latency":"1ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/appointments HTTP/1.1" 201 321 "-" "-"
+  ✅ POST /api/appointments books appointment
+{"severity":"INFO","message":"POST /api/appointments","timestamp":"2026-04-05T12:38:21.601Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/appointments","status":400,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/appointments HTTP/1.1" 400 50 "-" "-"
+  ✅ Booking fails without required fields
+{"severity":"INFO","message":"POST /api/appointments","timestamp":"2026-04-05T12:38:21.602Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/appointments","status":404,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/appointments HTTP/1.1" 404 29 "-" "-"
+  ✅ Booking fails with invalid doctor
+{"severity":"INFO","message":"GET /api/appointments","timestamp":"2026-04-05T12:38:21.603Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/appointments","status":200,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/appointments HTTP/1.1" 200 292 "-" "-"
+  ✅ GET /api/appointments returns user appointments
+{"severity":"INFO","message":"PUT /api/appointments/apt-de90f12e/cancel","timestamp":"2026-04-05T12:38:21.604Z","service":"medicap-api","httpRequest":{"requestMethod":"PUT","requestUrl":"/api/appointments/apt-de90f12e/cancel","status":200,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "PUT /api/appointments/apt-de90f12e/cancel HTTP/1.1" 200 363 "-" "-"
+  ✅ PUT /api/appointments/:id/cancel cancels appointment
+{"severity":"INFO","message":"GET /api/appointments","timestamp":"2026-04-05T12:38:21.605Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/appointments","status":401,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/appointments HTTP/1.1" 401 45 "-" "-"
+  ✅ Appointments require authentication
+
+📋 Records Tests:
+{"severity":"INFO","message":"GET /api/records","timestamp":"2026-04-05T12:38:21.606Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/records","status":200,"remoteIp":"127.0.0.1","latency":"1ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/records HTTP/1.1" 200 14 "-" "-"
+  ✅ GET /api/records returns user records
+{"severity":"INFO","message":"POST /api/records","timestamp":"2026-04-05T12:38:21.607Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/records","status":201,"remoteIp":"127.0.0.1","latency":"1ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/records HTTP/1.1" 201 337 "-" "-"
+  ✅ POST /api/records creates record (doctor)
+{"severity":"INFO","message":"POST /api/records","timestamp":"2026-04-05T12:38:21.608Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/records","status":403,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/records HTTP/1.1" 403 57 "-" "-"
+  ✅ Patient cannot create records
+
+🛡️ Admin Tests:
+{"severity":"INFO","message":"GET /api/admin/users","timestamp":"2026-04-05T12:38:21.609Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/admin/users","status":200,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/admin/users HTTP/1.1" 200 918 "-" "-"
+  ✅ GET /api/admin/users returns all users
+{"severity":"INFO","message":"GET /api/admin/users","timestamp":"2026-04-05T12:38:21.610Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/admin/users","status":403,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/admin/users HTTP/1.1" 403 47 "-" "-"
+  ✅ Admin users endpoint denied for patients
+{"severity":"INFO","message":"GET /api/admin/users","timestamp":"2026-04-05T12:38:21.611Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/admin/users","status":403,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/admin/users HTTP/1.1" 403 47 "-" "-"
+  ✅ Admin users endpoint denied for doctors
+{"severity":"INFO","message":"GET /api/admin/stats","timestamp":"2026-04-05T12:38:21.613Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/admin/stats","status":200,"remoteIp":"127.0.0.1","latency":"1ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/admin/stats HTTP/1.1" 200 143 "-" "-"
+  ✅ GET /api/admin/stats returns statistics
+{"severity":"INFO","message":"POST /api/admin/doctors","timestamp":"2026-04-05T12:38:21.614Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/admin/doctors","status":201,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/admin/doctors HTTP/1.1" 201 343 "-" "-"
+  ✅ POST /api/admin/doctors adds new doctor
+{"severity":"INFO","message":"POST /api/admin/patients","timestamp":"2026-04-05T12:38:21.673Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/admin/patients","status":201,"remoteIp":"127.0.0.1","latency":"57ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/admin/patients HTTP/1.1" 201 312 "-" "-"
+  ✅ POST /api/admin/patients adds new patient
+{"severity":"INFO","message":"DELETE /api/admin/users/admin-001","timestamp":"2026-04-05T12:38:21.675Z","service":"medicap-api","httpRequest":{"requestMethod":"DELETE","requestUrl":"/api/admin/users/admin-001","status":403,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "DELETE /api/admin/users/admin-001 HTTP/1.1" 403 32 "-" "-"
+  ✅ Cannot delete admin user
+
+📊 Stats Tests:
+{"severity":"INFO","message":"GET /api/stats","timestamp":"2026-04-05T12:38:21.676Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/stats","status":200,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/stats HTTP/1.1" 200 126 "-" "-"
+  ✅ GET /api/stats returns user stats
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/stats HTTP/1.1" 200 126 "-" "-"
+  ❌ Stats require authentication: Expected values to be strictly equal:
+
+200 !== 401
+
+
+🔧 Edge Case Tests:
+{"severity":"INFO","message":"POST /api/auth/login","timestamp":"2026-04-05T12:38:21.680Z","service":"medicap-api","httpRequest":{"requestMethod":"POST","requestUrl":"/api/auth/login","status":400,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "POST /api/auth/login HTTP/1.1" 400 44 "-" "-"
+  ✅ Invalid JSON body returns error
+{"severity":"INFO","message":"GET /nonexistent-page","timestamp":"2026-04-05T12:38:21.683Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/nonexistent-page","status":200,"remoteIp":"127.0.0.1","latency":"2ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /nonexistent-page HTTP/1.1" 200 11022 "-" "-"
+  ✅ SPA catch-all returns HTML
+{"severity":"INFO","message":"GET /api/doctors","timestamp":"2026-04-05T12:38:21.684Z","service":"medicap-api","httpRequest":{"requestMethod":"GET","requestUrl":"/api/doctors","status":200,"remoteIp":"127.0.0.1","latency":"0ms","protocol":"http"}}
+127.0.0.1 - - [05/Apr/2026:12:38:21 +0000] "GET /api/doctors HTTP/1.1" 200 4070 "-" "-"
+  ✅ Doctor doctors endpoint is public (no auth needed)
+
+==================================================
+
+📊 Test Results: 45 passed, 1 failed out of 46 tests
+   Success Rate: 97.8%
+
+❌ Failed tests:
+   - Stats require authentication: Expected values to be strictly equal:
+
+200 !== 401
+
+
+⚠️ SQLite not available, using in-memory fallback
+Error: Command failed with exit code 1: node tests/api.test.js && jest tests/server.test.js
+    at makeError (D:\medicap\node_modules\start-server-and-test\node_modules\execa\lib\error.js:60:11)
+    at handlePromise (D:\medicap\node_modules\start-server-and-test\node_modules\execa\index.js:118:26)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  shortMessage: 'Command failed with exit code 1: node tests/api.test.js && jest tests/server.test.js',
+  command: 'node tests/api.test.js && jest tests/server.test.js',
+  escapedCommand: '"node tests/api.test.js && jest tests/server.test.js"',
+  exitCode: 1,
+  signal: undefined,
+  signalDescription: undefined,
+  stdout: undefined,
+  stderr: undefined,
+  failed: true,
+  timedOut: false,
+  isCanceled: false,
+  killed: false
+}

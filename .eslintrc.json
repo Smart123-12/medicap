@@ -13,5 +13,24 @@
     "no-unused-vars": "warn",
     "no-console": "off",
     "semi": ["error", "always"]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["public/js/**/*.js", "js/**/*.js"],
+      "env": {
+        "browser": true,
+        "node": false
+      },
+      "globals": {
+        "App": "readonly",
+        "Store": "readonly",
+        "Pages": "readonly",
+        "Components": "readonly",
+        "CITIES": "readonly",
+        "SPECIALTIES": "readonly",
+        "TIME_SLOTS": "readonly",
+        "seedDatabase": "readonly"
+      }
+    }
+  ]
 }

@@ -1,0 +1,61 @@
+D:\medicap\cypress.config.js
+  no-unused-vars: 'on' is defined but never used.
+  no-unused-vars: 'config' is defined but never used.
+D:\medicap\js\app.js
+  no-undef: 'Store' is not defined.
+  no-undef: 'document' is not defined.
+  no-unused-vars: 'lastScroll' is assigned a value but never used.
+  no-undef: 'window' is not defined.
+  no-undef: 'Pages' is not defined.
+  no-undef: 'IntersectionObserver' is not defined.
+  no-undef: 'Components' is not defined.
+  no-unused-vars: 'id' is defined but never used.
+  no-unused-vars: 'phone' is assigned a value but never used.
+  no-undef: 'localStorage' is not defined.
+D:\medicap\js\components.js
+  no-undef: 'document' is not defined.
+  no-undef: 'Store' is not defined.
+D:\medicap\js\data.js
+  no-unused-vars: 'SPECIALTIES' is assigned a value but never used.
+  no-unused-vars: 'CITIES' is assigned a value but never used.
+  no-unused-vars: 'TIME_SLOTS' is assigned a value but never used.
+  no-unused-vars: 'seedDatabase' is defined but never used.
+  no-undef: 'localStorage' is not defined.
+D:\medicap\js\pages.js
+  no-unused-vars: 'Pages' is assigned a value but never used.
+  no-undef: 'Store' is not defined.
+  no-undef: 'CITIES' is not defined.
+  no-undef: 'SPECIALTIES' is not defined.
+  no-undef: 'Components' is not defined.
+  no-undef: 'TIME_SLOTS' is not defined.
+  no-unused-vars: 'userEmail' is assigned a value but never used.
+D:\medicap\js\store.js
+  no-unused-vars: 'Store' is assigned a value but never used.
+  no-undef: 'seedDatabase' is not defined.
+  no-undef: 'localStorage' is not defined.
+  no-undef: 'document' is not defined.
+  no-undef: 'window' is not defined.
+D:\medicap\public\js\app.js
+  no-unused-vars: 'id' is defined but never used.
+D:\medicap\public\js\data.js
+  no-unused-vars: 'SPECIALTIES' is assigned a value but never used.
+  no-unused-vars: 'CITIES' is assigned a value but never used.
+  no-unused-vars: 'TIME_SLOTS' is assigned a value but never used.
+  no-unused-vars: 'seedDatabase' is defined but never used.
+D:\medicap\public\js\pages.js
+  no-undef: 'SPECIALTIES' is not defined.
+  no-undef: 'TIME_SLOTS' is not defined.
+  no-unused-vars: 'userEmail' is assigned a value but never used.
+  no-unused-vars: 'doctor' is assigned a value but never used.
+  no-unused-vars: 'user' is defined but never used.
+D:\medicap\public\js\store.js
+  no-unused-vars: 'Store' is assigned a value but never used.
+  no-undef: 'seedDatabase' is not defined.
+  no-unused-vars: 'password' is defined but never used.
+D:\medicap\server.js
+  no-empty: Empty block statement.
+  no-unused-vars: 'password' is assigned a value but never used.
+  no-unused-vars: 'todayStr' is assigned a value but never used.
+  no-unused-vars: 'next' is defined but never used.
+D:\medicap\tests\server.test.js
+  no-unused-vars: 'assert' is assigned a value but never used.

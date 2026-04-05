@@ -26,7 +26,9 @@ const cache = apicache.middleware;
 let gcloud = null;
 try {
   gcloud = require('./services/google-cloud');
-} catch (e) {}
+} catch (e) {
+  // Ignore google cloud require if missing
+}
 
 // ==================== DATABASE SETUP ====================
 let Database;
@@ -105,7 +107,6 @@ app.use(hpp());
 app.use(cookieParser());
 
 // EFFICIENCY: Cache static or slow data endpoints
-app.use('/api/stats', cache('5 minutes'));
 app.use('/api/health', cache('1 minute'));
 
 // Google Cloud request logging
@@ -1190,4 +1191,9 @@ async function start() {
         `);
   });
 }
-start();
+
+if (require.main === module) {
+  start();
+}
+
+module.exports = app;

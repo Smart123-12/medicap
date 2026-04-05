@@ -1,0 +1,123 @@
+
+> medicap@3.1.0 test
+> node tests/api.test.js && jest tests/server.test.js
+
+
+🧪 MediCap API Test Suite
+
+==================================================
+
+📋 Health Check Tests:
+  ❌ GET /api/health returns 200: 
+  ❌ Health check returns version: 
+  ❌ Health check returns database type: 
+
+🔐 Authentication Tests:
+  ❌ POST /api/auth/login with admin credentials: 
+  ❌ Login fails with wrong password: 
+  ❌ Login fails with non-existent email: 
+  ❌ Login fails with empty fields: 
+  ❌ Register new patient: 
+  ❌ Register new doctor: 
+  ❌ Register fails with duplicate email: 
+  ❌ Register fails with short password: 
+  ❌ Register fails with invalid email: 
+  ❌ GET /api/auth/me returns current user: 
+  ❌ GET /api/auth/me fails without token: 
+  ❌ GET /api/auth/me fails with invalid token: 
+  ❌ PUT /api/auth/profile updates user: 
+  ❌ POST /api/auth/verify verifies account: 
+  ❌ PUT /api/auth/password changes password: 
+  ❌ Password change fails with wrong current password: 
+
+🩺 Doctor API Tests:
+  ❌ GET /api/doctors returns doctors list: 
+  ❌ GET /api/doctors/:id returns single doctor: 
+  ❌ GET /api/doctors/:id returns 404 for invalid id: 
+  ❌ Doctor filtering by specialty works: 
+  ❌ Doctor filtering by city works: 
+  ❌ Doctor search works: 
+
+📅 Appointment Tests:
+  ❌ POST /api/appointments books appointment: 
+  ❌ Booking fails without required fields: 
+  ❌ Booking fails with invalid doctor: 
+  ❌ GET /api/appointments returns user appointments: 
+  ❌ PUT /api/appointments/:id/cancel cancels appointment: 
+  ❌ Appointments require authentication: 
+
+📋 Records Tests:
+  ❌ GET /api/records returns user records: 
+  ❌ POST /api/records creates record (doctor): 
+  ❌ Patient cannot create records: 
+
+🛡️ Admin Tests:
+  ❌ GET /api/admin/users returns all users: 
+  ❌ Admin users endpoint denied for patients: 
+  ❌ Admin users endpoint denied for doctors: 
+  ❌ GET /api/admin/stats returns statistics: 
+  ❌ POST /api/admin/doctors adds new doctor: 
+  ❌ POST /api/admin/patients adds new patient: 
+  ❌ Cannot delete admin user: 
+
+📊 Stats Tests:
+  ❌ GET /api/stats returns user stats: 
+  ❌ Stats require authentication: 
+
+🔧 Edge Case Tests:
+  ❌ Invalid JSON body returns error: 
+  ❌ SPA catch-all returns HTML: 
+  ❌ Doctor doctors endpoint is public (no auth needed): 
+
+==================================================
+
+📊 Test Results: 0 passed, 46 failed out of 46 tests
+   Success Rate: 0.0%
+
+❌ Failed tests:
+   - GET /api/health returns 200: 
+   - Health check returns version: 
+   - Health check returns database type: 
+   - POST /api/auth/login with admin credentials: 
+   - Login fails with wrong password: 
+   - Login fails with non-existent email: 
+   - Login fails with empty fields: 
+   - Register new patient: 
+   - Register new doctor: 
+   - Register fails with duplicate email: 
+   - Register fails with short password: 
+   - Register fails with invalid email: 
+   - GET /api/auth/me returns current user: 
+   - GET /api/auth/me fails without token: 
+   - GET /api/auth/me fails with invalid token: 
+   - PUT /api/auth/profile updates user: 
+   - POST /api/auth/verify verifies account: 
+   - PUT /api/auth/password changes password: 
+   - Password change fails with wrong current password: 
+   - GET /api/doctors returns doctors list: 
+   - GET /api/doctors/:id returns single doctor: 
+   - GET /api/doctors/:id returns 404 for invalid id: 
+   - Doctor filtering by specialty works: 
+   - Doctor filtering by city works: 
+   - Doctor search works: 
+   - POST /api/appointments books appointment: 
+   - Booking fails without required fields: 
+   - Booking fails with invalid doctor: 
+   - GET /api/appointments returns user appointments: 
+   - PUT /api/appointments/:id/cancel cancels appointment: 
+   - Appointments require authentication: 
+   - GET /api/records returns user records: 
+   - POST /api/records creates record (doctor): 
+   - Patient cannot create records: 
+   - GET /api/admin/users returns all users: 
+   - Admin users endpoint denied for patients: 
+   - Admin users endpoint denied for doctors: 
+   - GET /api/admin/stats returns statistics: 
+   - POST /api/admin/doctors adds new doctor: 
+   - POST /api/admin/patients adds new patient: 
+   - Cannot delete admin user: 
+   - GET /api/stats returns user stats: 
+   - Stats require authentication: 
+   - Invalid JSON body returns error: 
+   - SPA catch-all returns HTML: 
+   - Doctor doctors endpoint is public (no auth needed): 
