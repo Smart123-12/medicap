@@ -1,7 +1,8 @@
 /* ============================================
-   MediCap — Responsive Styles
+   MediCap — Responsive Styles (Enhanced)
    ============================================ */
 
+/* ========== TABLET (≤ 1024px) ========== */
 @media (max-width: 1024px) {
     .hero-container {
         grid-template-columns: 1fr;
@@ -84,7 +85,10 @@
     }
 }
 
+/* ========== MOBILE (≤ 768px) ========== */
 @media (max-width: 768px) {
+
+    /* --- Navigation --- */
     .nav-links {
         display: none;
     }
@@ -97,6 +101,11 @@
         display: none;
     }
 
+    .nav-container {
+        padding: 0 var(--space-4);
+    }
+
+    /* --- Hero --- */
     .hero {
         min-height: auto;
         padding-top: calc(var(--nav-height) + var(--space-8));
@@ -104,7 +113,8 @@
     }
 
     .hero-title {
-        font-size: 2.25rem;
+        font-size: 2.1rem;
+        letter-spacing: -0.015em;
     }
 
     .hero-subtitle {
@@ -112,40 +122,71 @@
     }
 
     .hero-stats {
-        flex-direction: column;
-        gap: var(--space-4);
-        align-items: center;
+        gap: var(--space-6);
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .hero-stat {
         text-align: center;
+        min-width: 100px;
     }
 
+    .hero-stat-value {
+        font-size: 1.4rem;
+    }
+
+    /* --- Features --- */
     .features-grid {
         grid-template-columns: 1fr;
+        gap: var(--space-4);
     }
 
+    .feature-card {
+        padding: var(--space-6);
+    }
+
+    /* --- Steps --- */
     .steps-grid {
         grid-template-columns: 1fr;
         gap: var(--space-8);
     }
 
+    /* --- Locations --- */
     .locations-grid {
         grid-template-columns: 1fr 1fr;
+        gap: var(--space-4);
     }
 
+    /* --- Section Typography --- */
     .section-title {
         font-size: 1.75rem;
     }
 
+    .section-subtitle {
+        font-size: 0.95rem;
+    }
+
+    /* --- CTA --- */
     .cta-section {
-        padding: var(--space-10) var(--space-6);
+        padding: var(--space-10) var(--space-5);
+        border-radius: var(--radius-2xl);
     }
 
     .cta-title {
         font-size: 1.75rem;
     }
 
+    .cta-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .btn-white {
+        padding: var(--space-3) var(--space-6);
+        font-size: 0.95rem;
+    }
+
+    /* --- Footer --- */
     .footer-grid {
         grid-template-columns: 1fr;
         gap: var(--space-8);
@@ -154,58 +195,101 @@
     .footer-bottom {
         flex-direction: column;
         text-align: center;
+        gap: var(--space-3);
     }
 
+    .footer-bottom-links {
+        gap: var(--space-4);
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .footer {
+        margin-top: var(--space-12);
+        padding: var(--space-10) 0 var(--space-6);
+    }
+
+    /* --- Doctors --- */
     .doctors-toolbar {
         flex-direction: column;
         align-items: stretch;
+        gap: var(--space-3);
+    }
+
+    .doctors-toolbar .search-bar {
+        min-width: unset;
     }
 
     .doctors-grid {
         grid-template-columns: 1fr;
     }
 
+    /* --- Dashboard --- */
     .dashboard-stats {
         grid-template-columns: 1fr 1fr;
+        gap: var(--space-4);
     }
 
     .quick-actions {
         grid-template-columns: 1fr;
     }
 
+    .stat-value {
+        font-size: 1.4rem;
+    }
+
+    /* --- Appointment Cards --- */
     .appointment-card {
         flex-direction: column;
         align-items: stretch;
         text-align: center;
+        gap: var(--space-3);
     }
 
     .appointment-date-badge {
         width: 100%;
         height: auto;
         flex-direction: row;
-        gap: var(--space-2);
-        padding: var(--space-3);
+        gap: var(--space-3);
+        padding: var(--space-3) var(--space-4);
+        justify-content: center;
+        border-radius: var(--radius-xl);
+    }
+
+    .appointment-date-badge .day {
+        font-size: 1.25rem;
     }
 
     .appointment-actions {
         justify-content: center;
+        flex-wrap: wrap;
     }
 
+    /* --- Time Slots --- */
     .time-slots-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    /* --- Profile --- */
     .profile-header-card {
         flex-direction: column;
         text-align: center;
+        gap: var(--space-4);
     }
 
+    /* --- Auth --- */
     .auth-card {
         padding: var(--space-6);
+        border-radius: var(--radius-2xl);
     }
 
+    .auth-page {
+        padding: calc(var(--nav-height) + var(--space-6)) var(--space-4) var(--space-8);
+    }
+
+    /* --- Hero Card --- */
     .hero-image-card {
-        padding: var(--space-6);
+        padding: var(--space-5);
     }
 
     .hero-vitals {
@@ -213,55 +297,370 @@
         gap: var(--space-2);
     }
 
+    .hero-vital-value {
+        font-size: 1rem;
+    }
+
     .floating-card {
         display: none;
+    }
+
+    /* --- Toast --- */
+    .toast-container {
+        right: 8px;
+        left: 8px;
+        top: calc(var(--nav-height) + 12px);
     }
 
     .toast {
         min-width: auto;
         max-width: 100%;
     }
+
+    /* --- Scroll-to-top button position --- */
+    .scroll-top-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+    }
+
+    /* --- Modals --- */
+    .modal-overlay {
+        padding: var(--space-4) var(--space-3);
+        align-items: flex-end;
+    }
+
+    .modal {
+        border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+        max-height: 92vh;
+    }
+
+    /* --- Tables --- */
+    .table th,
+    .table td {
+        padding: var(--space-3) var(--space-4);
+        font-size: 0.8rem;
+    }
+
+    /* --- Sections --- */
+    .section {
+        padding: var(--space-12) 0;
+    }
+
+    .container {
+        padding: 0 var(--space-4);
+    }
+
+    /* --- Page headers --- */
+    .page-header {
+        padding: calc(var(--nav-height) + var(--space-6)) 0 var(--space-6);
+    }
+
+    .page-title {
+        font-size: 1.6rem;
+    }
+
+    /* --- Doctor card touch improvements --- */
+    .doctor-card {
+        padding: var(--space-5);
+    }
+
+    .doctor-card:hover {
+        transform: none; /* disable hover lift on touch */
+    }
+
+    /* --- Filter chips scroll on mobile --- */
+    .filter-chips {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: var(--space-2);
+        scrollbar-width: none;
+        gap: var(--space-2);
+    }
+
+    .filter-chips::-webkit-scrollbar {
+        display: none;
+    }
+
+    .filter-chip {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: var(--space-2) var(--space-4);
+        min-height: 40px; /* touch target */
+    }
+
+    /* --- Buttons touch target --- */
+    .btn {
+        min-height: 44px;
+    }
+
+    .btn-icon {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    /* --- Nav links touch --- */
+    .mobile-link {
+        min-height: 48px;
+        padding: var(--space-3) var(--space-5);
+    }
 }
 
+/* ========== SMALL MOBILE (≤ 480px) ========== */
 @media (max-width: 480px) {
+
+    /* --- Hero --- */
     .hero-title {
-        font-size: 1.85rem;
+        font-size: 1.8rem;
     }
 
     .hero-actions {
         flex-direction: column;
         align-items: center;
+        gap: var(--space-3);
     }
 
     .hero-actions .btn {
         width: 100%;
+        justify-content: center;
     }
 
+    .hero-badge {
+        font-size: 0.75rem;
+        padding: var(--space-2) var(--space-3);
+    }
+
+    /* --- Locations --- */
     .locations-grid {
         grid-template-columns: 1fr;
     }
 
+    /* --- Dashboard --- */
     .dashboard-stats {
         grid-template-columns: 1fr;
     }
 
+    /* --- Auth --- */
     .role-selector {
         grid-template-columns: 1fr;
     }
 
+    /* --- Hero card vitals --- */
     .hero-vitals {
         grid-template-columns: 1fr;
+        gap: var(--space-2);
     }
 
+    /* --- Tabs --- */
     .tabs {
-        flex-direction: column;
+        gap: var(--space-1);
     }
 
+    .tab {
+        font-size: 0.8rem;
+        padding: var(--space-2) var(--space-3);
+    }
+
+    /* --- Filter chips stacked --- */
     .filter-chips {
-        flex-direction: column;
+        flex-direction: row; /* keep horizontal scroll */
     }
 
+    /* --- Page title --- */
     .page-title {
+        font-size: 1.4rem;
+    }
+
+    .section-title {
         font-size: 1.5rem;
+    }
+
+    /* --- Section spacing --- */
+    .section {
+        padding: var(--space-10) 0;
+    }
+
+    /* --- Stat card compact --- */
+    .stat-card {
+        padding: var(--space-4);
+        gap: var(--space-3);
+    }
+
+    .stat-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+
+    /* --- Appointment card compact --- */
+    .appointment-date-badge .day {
+        font-size: 1.1rem;
+    }
+
+    /* --- Time slot compact --- */
+    .time-slot {
+        padding: var(--space-2);
+        font-size: 0.775rem;
+    }
+
+    /* --- Modal full screen on very small --- */
+    .modal {
+        max-height: 96vh;
+    }
+
+    /* --- Scroll top btn --- */
+    .scroll-top-btn {
+        bottom: 16px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+    }
+
+    /* --- Footer compact --- */
+    .footer {
+        padding: var(--space-8) 0 var(--space-5);
+    }
+
+    /* --- CTA compact --- */
+    .cta-section {
+        padding: var(--space-8) var(--space-4);
+    }
+
+    .cta-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* ========== EXTRA SMALL (≤ 360px) ========== */
+@media (max-width: 360px) {
+
+    .hero-title {
+        font-size: 1.55rem;
+    }
+
+    .hero-stat-value {
+        font-size: 1.2rem;
+    }
+
+    .nav-container {
+        padding: 0 var(--space-3);
+    }
+
+    .container {
+        padding: 0 var(--space-3);
+    }
+
+    .section-title {
+        font-size: 1.35rem;
+    }
+
+    .btn-lg {
+        font-size: 0.9rem;
+        padding: var(--space-3) var(--space-5);
+    }
+
+    .doctor-card-footer {
+        flex-direction: column;
+        gap: var(--space-3);
+        align-items: stretch;
+    }
+
+    .doctor-card-footer .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .time-slots-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-bottom-links {
+        gap: var(--space-3);
+        font-size: 0.8rem;
+    }
+
+    /* Scroll-to-top stays small */
+    .scroll-top-btn {
+        width: 38px;
+        height: 38px;
+        bottom: 12px;
+        right: 12px;
+    }
+}
+
+/* ========== TOUCH DEVICE OPTIMIZATIONS ========== */
+@media (hover: none) and (pointer: coarse) {
+
+    /* Disable hover-lift transforms on touch — prevent sticky hover */
+    .doctor-card:hover,
+    .feature-card:hover,
+    .location-card:hover,
+    .stat-card:hover {
+        transform: none;
+        box-shadow: var(--shadow-sm);
+    }
+
+    /* Keep top accent bar visible on touch */
+    .doctor-card::before {
+        display: none;
+    }
+
+    .feature-card::after {
+        display: none;
+    }
+
+    /* Increase all tap targets to 44px minimum */
+    .nav-link,
+    .btn,
+    .filter-chip,
+    .page-btn,
+    .social-link,
+    .tab {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Improve time slot tap size */
+    .time-slot {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Better scroll feel for filter chips */
+    .filter-chips {
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+
+    .filter-chip {
+        scroll-snap-align: start;
+    }
+}
+
+/* ========== PRINT MEDIA ========== */
+@media print {
+    .navbar,
+    .scroll-top-btn,
+    .toast-container,
+    .floating-card,
+    .hamburger,
+    .mobile-nav,
+    .mobile-overlay {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+
+    .section {
+        padding: 1rem 0;
     }
 }

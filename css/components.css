@@ -80,7 +80,7 @@
 }
 
 [data-theme="dark"] .doctor-avatar {
-    background: linear-gradient(135deg, rgba(14, 161, 122, 0.2), rgba(14, 161, 122, 0.3));
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.32));
     color: var(--primary-400);
 }
 
@@ -183,7 +183,7 @@
 }
 
 .stat-icon.teal {
-    background: rgba(14, 161, 122, 0.12);
+    background: rgba(59, 130, 246, 0.12);
     color: var(--primary-500);
 }
 
@@ -381,7 +381,7 @@
 
 .search-bar:focus-within {
     border-color: var(--primary-400);
-    box-shadow: 0 0 0 3px rgba(14, 161, 122, 0.1);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
     background: var(--bg-primary);
 }
 
@@ -425,7 +425,7 @@
 }
 
 [data-theme="dark"] .filter-chip:hover {
-    background: rgba(14, 161, 122, 0.1);
+    background: rgba(59, 130, 246, 0.12);
     color: var(--primary-400);
 }
 

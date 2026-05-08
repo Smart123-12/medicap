@@ -6,11 +6,12 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "start-server-and-test start http://localhost:8080 \"node tests/api.test.js && jest tests/server.test.js\"",
+    "test": "start-server-and-test start http://localhost:8080 \"node tests/api.test.js && jest tests/server.test.js tests/security.test.js\"",
     "test:coverage": "jest --coverage",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.+(js|json|html|css)\"",
-    "test:health": "node -e \"fetch('http://localhost:8080/api/health').then(r=>r.json()).then(console.log)\""
+    "test:health": "node -e \"fetch('http://localhost:8080/api/health').then(r=>r.json()).then(console.log)\"",
+    "sonar": "npx sonarqube-scanner"
   },
   "keywords": [
     "healthcare",

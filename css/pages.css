@@ -92,8 +92,8 @@
 }
 
 [data-theme="dark"] .hero-badge {
-    background: rgba(14, 161, 122, 0.1);
-    border-color: rgba(14, 161, 122, 0.2);
+    background: rgba(59, 130, 246, 0.12);
+    border-color: rgba(59, 130, 246, 0.25);
     color: var(--primary-400);
 }
 
@@ -390,7 +390,7 @@
 }
 
 .feature-icon.teal {
-    background: rgba(14, 161, 122, 0.12);
+    background: rgba(59, 130, 246, 0.12);
     color: var(--primary-500);
 }
 
@@ -478,7 +478,7 @@
     background: var(--primary-500);
     color: white;
     transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(14, 161, 122, 0.3);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.35);
 }
 
 .step-title {
@@ -759,7 +759,7 @@
 }
 
 [data-theme="dark"] .time-slot:hover {
-    background: rgba(14, 161, 122, 0.1);
+    background: rgba(59, 130, 246, 0.12);
 }
 
 .time-slot.selected {

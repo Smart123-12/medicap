@@ -6,6 +6,8 @@
 [![Node.js](https://img.shields.io/badge/Node.js-20+-green?logo=node.js)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+**GitHub Topics:** `healthcare`, `doctor`, `patient`, `appointments`, `medical-records`, `gujarat`, `india`, `google-cloud-run`, `expressjs`, `sqlite`
+
 ---
 
 ## 📋 Overview

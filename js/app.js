@@ -104,16 +104,44 @@ const App = {
     },
 
     bindScroll() {
-        let lastScroll = 0;
+        const nav = document.getElementById('main-nav');
+        const scrollTopBtn = document.getElementById('scroll-top-btn');
+
         window.addEventListener('scroll', () => {
-            const nav = document.getElementById('main-nav');
             if (window.scrollY > 50) {
                 nav.classList.add('scrolled');
             } else {
                 nav.classList.remove('scrolled');
             }
-            lastScroll = window.scrollY;
+
+            // Show/hide scroll-to-top button
+            if (scrollTopBtn) {
+                if (window.scrollY > 300) {
+                    scrollTopBtn.classList.add('visible');
+                } else {
+                    scrollTopBtn.classList.remove('visible');
+                }
+            }
         });
+
+        // Scroll-to-top click
+        scrollTopBtn?.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    },
+
+    // Add ripple effect to a button
+    addRipple(button, event) {
+        const circle = document.createElement('span');
+        const diameter = Math.max(button.clientWidth, button.clientHeight);
+        const radius = diameter / 2;
+        const rect = button.getBoundingClientRect();
+        circle.style.width = circle.style.height = `${diameter}px`;
+        circle.style.left = `${event.clientX - rect.left - radius}px`;
+        circle.style.top = `${event.clientY - rect.top - radius}px`;
+        circle.classList.add('ripple-wave');
+        button.appendChild(circle);
+        circle.addEventListener('animationend', () => circle.remove());
     },
 
     navigateTo(page, doctorId = null, city = null) {
@@ -203,6 +231,14 @@ const App = {
 
         document.querySelectorAll('.fade-in, .slide-up, .scale-in').forEach(el => {
             observer.observe(el);
+        });
+
+        // Wire ripple effect on all primary buttons
+        document.querySelectorAll('.btn-primary').forEach(btn => {
+            if (!btn.classList.contains('ripple')) {
+                btn.classList.add('ripple');
+                btn.addEventListener('click', (e) => this.addRipple(btn, e));
+            }
         });
     },
 
