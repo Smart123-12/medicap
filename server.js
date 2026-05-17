@@ -10,6 +10,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const fs = require('fs');
@@ -49,8 +50,19 @@ try {
 // ==================== APP SETUP ====================
 const app = express();
 const PORT = process.env.PORT || 8080;
-const JWT_SECRET = process.env.JWT_SECRET || 'medicap-secret-key-change-in-production';
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const JWT_SECRET =
+  process.env.JWT_SECRET || (NODE_ENV === 'production' ? '' : crypto.randomBytes(48).toString('hex'));
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+
+if (!JWT_SECRET) {
+  console.error('❌ JWT_SECRET environment variable is required in production');
+  process.exit(1);
+}
+
+if (!process.env.JWT_SECRET && NODE_ENV !== 'production') {
+  console.warn('⚠️ JWT_SECRET not set; using a temporary non-production secret');
+}
 
 // ==================== MIDDLEWARE ====================
 app.use(cors());
